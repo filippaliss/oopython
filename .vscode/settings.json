@@ -1,0 +1,7 @@
+{
+    "python.analysis.extraPaths": [
+        "./kmom02/yahtzee1/src",
+        "./kmom02/yahtzee1/src",
+        "./kmom02/yahtzee1"
+    ]
+}
