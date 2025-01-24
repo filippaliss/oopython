@@ -11,9 +11,7 @@ app = Flask(__name__)
 def main():
     """
     Main route for the Yahtzee web application.
-
     Creates a Hand object and renders the 'main.html' template with the hand.
-
     Returns:
         str: Rendered HTML template.
     """
@@ -23,10 +21,8 @@ def main():
 @app.route("/about")
 def about():
     """
-    About route for the Yahtzee web application.
-
+    About route for the Yahtzee web application.    
     Renders the 'about.html' template.
-
     Returns:
         str: Rendered HTML template.
     """
