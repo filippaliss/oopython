@@ -55,5 +55,19 @@ class TestDie(unittest.TestCase):
         die = Die()
         self.assertEqual(die.get_name(), "six")
 
+    def test_get_first_roll_correct(self):
+        """
+        Test if expected_values == actual_values.
+        """
+        die = Die()
+        expected_values = [1,1,6,3,2]
+        actual_values = []
+        print(" ")
+        for _ in range(5):
+            die.roll()
+            actual_values.append(die.get_value())
+
+        self.assertEqual(actual_values, expected_values)
+
 if __name__ == '__main__':
     unittest.main()
