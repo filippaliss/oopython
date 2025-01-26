@@ -21,7 +21,7 @@ def main():
 @app.route("/about")
 def about():
     """
-    About route for the Yahtzee web application.    
+    About route for the Yahtzee web application.
     Renders the 'about.html' template.
     Returns:
         str: Rendered HTML template.
