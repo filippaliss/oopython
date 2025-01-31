@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 
 """
-0b594bab4ad34d09335d3275efdbad6a
+b6e4c71f8bb1e2639f17c71f74a67408
 oopython
 lab2
 v2
-fili22
-2025-01-26 14:16:13
+zowa22
+2025-01-26 14:46:09
 v4.0.0 (2019-03-05)
 
-Generated 2025-01-26 15:16:14 by dbwebb lab-utility v4.0.0 (2019-03-05).
+Generated 2025-01-26 15:46:09 by dbwebb lab-utility v4.0.0 (2019-03-05).
 https://github.com/dbwebb-se/lab
 """
 
@@ -53,7 +53,7 @@ dbwebb.ready_to_begin()
 # Create a *get* property for "ssn".
 #
 # In the code below create a new variable called **per** and set it to a new
-# instance of Person. Give it the name `FitzChivalry` and ssn `350967-5218`.
+# instance of Person. Give it the name `Badgerlock` and ssn `502075-3392`.
 #
 #
 # Answer with per\'s getter for ssn.
@@ -82,7 +82,7 @@ dbwebb.assert_equal("1.1", ANSWER, False)
 # of the attribute city...).
 #
 # Create a new instance of the class Address. Initiate it with the city
-# `Buckkeep`, the state `Gotland` and the country `Andor` and store it in a
+# `Imre`, the state `Skane` and the country `Shienar` and store it in a
 # variable called **per_address**.
 #
 # Now, go back and add the instance attribute **address** to your Person
@@ -129,9 +129,9 @@ dbwebb.assert_equal("1.2", ANSWER, False)
 #
 #
 # Create a new instance of the class Teacher. Initiate it with the name
-# `Goliat` and ssn `228474-2825`.
-# Use the add_course method to add the following courses, `htmlphp`, `webapp`
-# and `ramverk2`.
+# `Buster` and ssn `578118-6946`.
+# Use the add_course method to add the following courses, `linux`, `ramverk2`
+# and `python`.
 #
 #
 # Answer with the Teacher object's string representation.
@@ -162,9 +162,9 @@ dbwebb.assert_equal("1.3", ANSWER, False)
 # average grade. Ignore grades with "-" in the calculation.
 #
 # Create a new instance of the class Student. Initiate it with the name
-# `James` and ssn `768244-4857`.
-# Use the add_course_grade method to add the following courses, `oopython`
-# with grade `4`, `htmlphp` with grade `-` and `webgl` with grade `3`.
+# `Farseer` and ssn `541355-8072`.
+# Use the add_course_grade method to add the following courses, `webapp` with
+# grade `3`, `linux` with grade `-` and `oopython` with grade `3`.
 #
 #
 # Answer with the Student object's "average_grade" method.
