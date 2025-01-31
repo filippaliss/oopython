@@ -14,10 +14,14 @@ class Hand():
         list of values for dice. else random values.
 
         """
+        self.dice = []
+
         if dice_values is None:
-            self.dice = [Die() for _ in range(5)]
+            for _ in range (5):
+                self.dice.append(Die())
         else:
-            self.dice = [Die(value) for value in dice_values]
+            for value in dice_values:
+                self.dice.append(Die(value))
 
     def roll(self, indexes=None):
         """
@@ -41,4 +45,8 @@ class Hand():
         Returns:
             str: ', 'seperating the string of dice values in the hand.
         """
-        return ", ".join(str(die.get_value()) for die in self.dice)
+        values = []
+        for die in self.dice:
+            values.append(str(die.get_value()))
+
+        return ", ".join(values)
