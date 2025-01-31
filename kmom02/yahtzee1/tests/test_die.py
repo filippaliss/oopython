@@ -23,7 +23,7 @@ class TestDie(unittest.TestCase):
         """
         die = Die()
         self.assertIsInstance(die, Die)
-        self.assertIs(die.get_value(), range(1, 7))
+        self.assertIn(die.get_value(), range(1, 7))
 
     def test_create_die_with_initial_value(self):
         """
