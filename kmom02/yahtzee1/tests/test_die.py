@@ -47,6 +47,7 @@ class TestDie(unittest.TestCase):
         initial_value = die.get_value()
         die.roll()
         new_value = die.get_value()
+        
         self.assertNotEqual(initial_value, new_value)
 
     def test_get_name_returns_correct_name(self):
