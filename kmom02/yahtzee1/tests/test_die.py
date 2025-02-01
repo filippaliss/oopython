@@ -45,10 +45,10 @@ class TestDie(unittest.TestCase):
         """
         die = Die()
         initial_value = die.get_value()
+        self.assertEqual(initial_value, 6)
         die.roll()
         new_value = die.get_value()
-        
-        self.assertNotEqual(initial_value, new_value)
+        self.assertEqual(new_value, 1)
 
     def test_get_name_returns_correct_name(self):
         """
