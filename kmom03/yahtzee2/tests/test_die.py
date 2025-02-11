@@ -71,5 +71,16 @@ class TestDie(unittest.TestCase):
 
         self.assertEqual(actual_values, expected_values)
 
+    def test_die_eq_comparison(self):
+        """
+        Test if the equality comparison (__eq__) works correctly between Die objects.
+        """
+        die1 = Die(6)
+        die2 = Die(6)
+        die3 = Die(3)
+
+        self.assertEqual(die1.get_value(), die2.get_value())
+        self.assertNotEqual(die1.get_value(), die3.get_value())
+
 if __name__ == '__main__':
     unittest.main()
