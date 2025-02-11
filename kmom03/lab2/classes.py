@@ -3,18 +3,18 @@ class Person:
         self.name = name
         self.__ssn = ssn
         self.address = address
-    
+
     @property
     def ssn(self):
         return self.__ssn
-    
+
     def set_address(self, address):
-         self.address = address
+        self.address = address
 
     def __str__(self):
-            if isinstance(self.address, Address):
-                return f"Name: {self.name} SSN: {self.ssn} {self.address}"
-            return f"Name: {self.name} SSN: {self.ssn}"
+        if isinstance(self.address, Address):
+            return f"Name: {self.name} SSN: {self.ssn} {self.address}"
+        return f"Name: {self.name} SSN: {self.ssn}"
 
 class Address:
     def __init__(self, city, state, country):
@@ -23,15 +23,15 @@ class Address:
         self.country = country
 
     def __str__(self):
-            return f"Address: {self.city} {self.state} {self.country}"
-    
+        return f"Address: {self.city} {self.state} {self.country}"
+
 class Teacher(Person):
     def __init__(self, name, ssn, address=""):
         super().__init__(name, ssn, address)
         self.courses = []
 
     def add_course(self, course):
-         self.courses.append(course)
+        self.courses.append(course)
 
     def __str__(self):
         base_str = super().__str__()
@@ -40,17 +40,17 @@ class Teacher(Person):
             if i > 0:
                 courses_str += ", "
             courses_str += course
-        
+
         return f"{base_str} Courses: {courses_str}" if courses_str else base_str
-    
+
 class Student(Person):
     def __init__(self, name, ssn, address=""):
         super().__init__(name, ssn, address)
         self.courses_grades = []
 
     def add_course_grade(self, course, grade):
-         self.courses_grades.append((course, grade))
-    
+        self.courses_grades.append((course, grade))
+
     def average_grade(self):
         total = 0
         count = 0
