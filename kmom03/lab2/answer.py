@@ -15,14 +15,13 @@ https://github.com/dbwebb-se/lab
 """
 
 from dbwebb import Dbwebb
+from classes import Person, Address, Teacher, Student
 
 
 # pylint: disable=invalid-name
 
 dbwebb = Dbwebb()
 dbwebb.ready_to_begin()
-
-from classes import Person, Address, Teacher, Student
 
 
 
@@ -31,7 +30,7 @@ from classes import Person, Address, Teacher, Student
 #
 # If you need to peek at examples or just want to know more, take a look at
 # the [Python documentation](https://docs.python.org/3/library/index.html).
-# Here you will find everything this lab will go through and much more.  
+# Here you will find everything this lab will go through and much more.
 #
 
 
