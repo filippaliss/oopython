@@ -24,3 +24,23 @@ class Address:
 
     def __str__(self):
             return f"Address: {self.city} {self.state} {self.country}"
+    
+class Teacher(Person):
+    def __init__(self, name, ssn, address=""):
+        super().__init__(name, ssn, address)
+        self.courses = []
+
+    def add_course(self, course):
+         self.courses.append(course)
+
+    def __str__(self):
+        base_str = super().__str__()
+        courses_str = ""
+        for i, course in enumerate(self.courses):
+            if i > 0:
+                courses_str += ", "
+            courses_str += course
+        
+        return f"{base_str} Courses: {courses_str}" if courses_str else base_str
+    
+    
