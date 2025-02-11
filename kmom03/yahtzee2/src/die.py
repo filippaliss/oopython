@@ -52,3 +52,15 @@ class Die():
         Returns a string representation of the die's current value.
         """
         return str(self._value)
+
+    def __eq__(self, other):
+        """
+        Function accepts either a Die object or an integer.
+        It returns True if the dice show the same value, or if the
+        integer matches the die's value. Otherwise, it returns False.
+        """
+        if isinstance(other, Die):
+            return self.value == other.value
+        elif isinstance(other, int):
+            return self.value == other
+        return False

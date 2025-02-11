@@ -50,3 +50,13 @@ class Hand():
             values.append(str(die.get_value()))
 
         return ", ".join(values)
+
+    def to_list(self):
+        """
+        Return a list contaning the values(integers) of all the dice
+        in the Hand object
+        """
+        result = []
+        for die in self.dice:
+            result.append(die._value)
+        return result
