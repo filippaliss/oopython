@@ -60,5 +60,4 @@ class Student(Person):
                 count += 1
         if count > 0 :
             return total / count
-        else:
-            return 0
+        return 0
