@@ -21,7 +21,7 @@ from dbwebb import Dbwebb
 dbwebb = Dbwebb()
 dbwebb.ready_to_begin()
 
-from classes import Person
+from classes import Person, Address
 
 
 
@@ -106,12 +106,12 @@ dbwebb.assert_equal("1.1", ANSWER, False)
 # Write your code below and put the answer into the variable ANSWER.
 #
 
+per_address = Address("Buckkeep", "Gotland", "Andor")
+
+per.set_address(per_address)
 
 
-
-
-
-ANSWER = "Replace this text with the variable holding the answer."
+ANSWER = str(per)
 
 # I will now test your answer - change false to true to get a hint.
 dbwebb.assert_equal("1.2", ANSWER, False)
