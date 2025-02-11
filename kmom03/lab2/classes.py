@@ -43,4 +43,22 @@ class Teacher(Person):
         
         return f"{base_str} Courses: {courses_str}" if courses_str else base_str
     
+class Student(Person):
+    def __init__(self, name, ssn, address=""):
+        super().__init__(name, ssn, address)
+        self.courses_grades = []
+
+    def add_course_grade(self, course, grade):
+         self.courses_grades.append((course, grade))
     
+    def average_grade(self):
+        total = 0
+        count = 0
+        for course, grade in self.courses_grades:
+            if grade != "-":
+                total += grade
+                count += 1
+        if count > 0 :
+            return total / count
+        else:
+            return 0
