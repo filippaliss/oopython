@@ -1,7 +1,9 @@
+"""
+Module to define unit tests for the Hand class.
+"""
 import unittest
 import random
 from src.hand import Hand
-from src.die import Die
 
 class TestHand(unittest.TestCase):
     """
@@ -13,7 +15,7 @@ class TestHand(unittest.TestCase):
         Set up the test environment.
         """
         random.seed(42)
-    
+
     def test_create_hand_without_arguments(self):
         """
         Test creating a hand without providing arguments.

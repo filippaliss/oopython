@@ -12,6 +12,11 @@ class Die():
     MIN_ROLL_VALUE = 1
     MAX_ROLL_VALUE = 6
 
+    @property
+    def value(self):
+        """Getter för att hämta värdet på tärningen"""
+        return self._value
+
     def __init__(self, value=None):
         """
         Initializes a Die object.
@@ -60,7 +65,7 @@ class Die():
         integer matches the die's value. Otherwise, it returns False.
         """
         if isinstance(other, Die):
-            return self.value == other.value
-        elif isinstance(other, int):
-            return self.value == other
+            return self._value == other.value
+        if isinstance(other, int):
+            return self._value == other
         return False

@@ -58,5 +58,5 @@ class Hand():
         """
         result = []
         for die in self.dice:
-            result.append(die._value)
+            result.append(die.value)
         return result
