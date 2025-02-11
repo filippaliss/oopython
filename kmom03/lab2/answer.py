@@ -21,7 +21,7 @@ from dbwebb import Dbwebb
 dbwebb = Dbwebb()
 dbwebb.ready_to_begin()
 
-from classes import Person, Address
+from classes import Person, Address, Teacher
 
 
 
@@ -141,12 +141,16 @@ dbwebb.assert_equal("1.2", ANSWER, False)
 # Write your code below and put the answer into the variable ANSWER.
 #
 
+teacher = Teacher("Goliat", "228474-2825")
+teacher.add_course("htmlphp")
+teacher.add_course("webapp")
+teacher.add_course("ramverk2")
 
 
 
 
 
-ANSWER = "Replace this text with the variable holding the answer."
+ANSWER = str(teacher)
 
 # I will now test your answer - change false to true to get a hint.
 dbwebb.assert_equal("1.3", ANSWER, False)
