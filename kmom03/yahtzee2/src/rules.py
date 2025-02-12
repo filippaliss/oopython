@@ -22,7 +22,7 @@ class SameValueRule(Rule):
         self.name = name
 
     def points(self, hand: Hand) -> int:
-        return sum(die.get_value() 
+        return sum(die.get_value()
             for die in hand.dice if die.get_value() == self.value)
 
 class Ones(SameValueRule):
@@ -167,7 +167,7 @@ class Yahtzee(Rule):
                 counts[value] += 1
             else:
                 counts[value] = 1
-            
+
         for count in counts.values():
             if count >= 5:
                 return 50
