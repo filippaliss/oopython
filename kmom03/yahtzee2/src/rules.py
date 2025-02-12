@@ -20,11 +20,11 @@ class SameValueRule(Rule):
     def __init__(self, value: int, name: str):
         self.value = value
         self.name = name
-    
+
     def points(self, hand: Hand) -> int:
-        return sum(die.get_value() 
+        return sum(die.get_value()
             for die in hand.dice if die.get_value() == self.value)
-    
+
 class Ones(SameValueRule):
     """
     Rule för att räkna ettor.
@@ -69,7 +69,7 @@ class Sixes(SameValueRule):
 
 class ThreeOfAKind(Rule):
     def __init__(self):
-        self.name = "Three of a kind"
+        self.name = "Three Of A Kind"
 
     def points(self, hand: Hand) -> int:
 
@@ -81,7 +81,7 @@ class ThreeOfAKind(Rule):
                 counts[value] += 1
             else:
                 counts[value] = 1
-            
+
         for count in counts.values():
             if count >= 3:
                 return sum(die.get_value() for die in hand.dice)
@@ -90,7 +90,7 @@ class ThreeOfAKind(Rule):
 
 class FourOfAKind(Rule):
     def __init__(self):
-        self.name = "Four of a kind"
+        self.name = "Four Of A Kind"
 
     def points(self, hand: Hand) -> int:
 
@@ -102,7 +102,7 @@ class FourOfAKind(Rule):
                 counts[value] += 1
             else:
                 counts[value] = 1
-            
+
         for count in counts.values():
             if count >= 4:
                 return sum(die.get_value() for die in hand.dice)
@@ -112,7 +112,7 @@ class FourOfAKind(Rule):
 class FullHouse(Rule):
     def __init__(self):
         self.name = "Full House"
-    
+
     def points(self, hand: Hand) -> int:
 
         counts = {}
@@ -126,38 +126,32 @@ class FullHouse(Rule):
 
 class SmallStraight(Rule):
     def __init__(self):
-        self.name = "Small straight"
-    
+        self.name = "Small Straight"
+
     def points(self, hand: Hand) -> int:
         values = sorted(set(die.get_value() for die in hand.dice))
 
         small_straight = [
-            [1, 2, 3, 4],
-            [2, 3, 4, 5],
-            [3, 4, 5, 6]
+            {1, 2, 3, 4},
+            {2, 3, 4, 5},
+            {3, 4, 5, 6}
         ]
-        
+
         for straight in small_straight:
-            if all (num in values for num in straight):
+            if  straight.issubset(values):
                 return 30
-            return 0
+        return 0
 
 class LargeStraight(Rule):
     def __init__(self):
-        self.name = "Large straight"
-    
+        self.name = "Large Straight"
+
     def points(self, hand: Hand) -> int:
         values = sorted(set(die.get_value() for die in hand.dice))
 
-        large_straight = [
-            [1, 2, 3, 4, 5],
-            [2, 3, 4, 5, 6]
-        ]
-        
-        for straight in large_straight:
-            if all (num in values for num in straight):
-                return 40
-            return 0
+        if values == [1, 2, 3, 4, 5] or values == [2, 3, 4, 5, 6]:
+            return 40
+        return 0
 
 class Yahtzee(Rule):
     def __init__(self):
@@ -173,7 +167,7 @@ class Yahtzee(Rule):
                 counts[value] += 1
             else:
                 counts[value] = 1
-            
+
         for count in counts.values():
             if count >= 5:
                 return 50
