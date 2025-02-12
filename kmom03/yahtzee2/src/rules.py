@@ -1,3 +1,6 @@
+"""
+rule filen, med alla regler till yahtzeet.
+"""
 from abc import ABC, abstractmethod
 from src.hand import Hand
 
@@ -11,7 +14,6 @@ class Rule(ABC):
         denna skall vara tom men används till alla regler för poängräkning.
         """
 
-        pass
 
 class SameValueRule(Rule):
     """
@@ -68,6 +70,10 @@ class Sixes(SameValueRule):
         super().__init__(6, "Sixes")
 
 class ThreeOfAKind(Rule):
+    """
+    rule four of a kind, kollar om man får 3 av samma,
+    gör inget skillnad på total summan.
+    """
     def __init__(self):
         self.name = "Three Of A Kind"
 
@@ -89,6 +95,10 @@ class ThreeOfAKind(Rule):
         return 0
 
 class FourOfAKind(Rule):
+    """
+    rule four of a kind, kollar om man får fyra av samma,
+    gör inget skillnad på total summan.
+    """
     def __init__(self):
         self.name = "Four Of A Kind"
 
@@ -110,6 +120,9 @@ class FourOfAKind(Rule):
         return 0
 
 class FullHouse(Rule):
+    """
+    rule fullhouse kollar om man får 2 av samma samt 3 av samma på ett kasst.
+    """
     def __init__(self):
         self.name = "Full House"
 
@@ -125,6 +138,9 @@ class FullHouse(Rule):
         return 0
 
 class SmallStraight(Rule):
+    """
+    rule smallstraight kollar om man får 4 i nummer ordning.
+    """
     def __init__(self):
         self.name = "Small Straight"
 
@@ -143,17 +159,23 @@ class SmallStraight(Rule):
         return 0
 
 class LargeStraight(Rule):
+    """
+    rule large straight kollar om man får en stor/liten steg (svenska regler)
+    """
     def __init__(self):
         self.name = "Large Straight"
 
     def points(self, hand: Hand) -> int:
         values = sorted(set(die.get_value() for die in hand.dice))
 
-        if values == [1, 2, 3, 4, 5] or values == [2, 3, 4, 5, 6]:
+        if values in ([1, 2, 3, 4, 5], [2, 3, 4, 5, 6]):
             return 40
         return 0
 
 class Yahtzee(Rule):
+    """
+    yahtzee rule, kollar om tärningarna slår 5 av samma.
+    """
     def __init__(self):
         self.name = "Yahtzee"
 
@@ -175,6 +197,9 @@ class Yahtzee(Rule):
         return 0
 
 class Chance(Rule):
+    """
+    chance rule där ett kast blir chance och alla poäng sätts.
+    """
     def __init__(self):
         self.name = "Chance"
 
