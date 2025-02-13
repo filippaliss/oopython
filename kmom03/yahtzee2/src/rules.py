@@ -24,8 +24,11 @@ class SameValueRule(Rule):
         self.name = name
 
     def points(self, hand: Hand) -> int:
-        return sum(die.get_value()
-            for die in hand.dice if die.get_value() == self.value)
+        total = 0
+        for die in hand.dice :
+            if die.get_value() == self.value:
+                total += die.get_value()
+        return total
 
 class Ones(SameValueRule):
     """
@@ -90,8 +93,10 @@ class ThreeOfAKind(Rule):
 
         for count in counts.values():
             if count >= 3:
-                return sum(die.get_value() for die in hand.dice)
-
+                total = 0
+                for die in hand.dice:
+                    total += die.get_value()
+                return total
         return 0
 
 class FourOfAKind(Rule):
@@ -115,7 +120,10 @@ class FourOfAKind(Rule):
 
         for count in counts.values():
             if count >= 4:
-                return sum(die.get_value() for die in hand.dice)
+                total = 0
+                for die in hand.dice:
+                    total += die.get_value()
+                return total
 
         return 0
 
@@ -145,7 +153,10 @@ class SmallStraight(Rule):
         self.name = "Small Straight"
 
     def points(self, hand: Hand) -> int:
-        values = sorted(set(die.get_value() for die in hand.dice))
+        values = set ()
+        for die in hand.dice:
+            values.add(die.get_value())
+        values = sorted(values)
 
         small_straight = [
             {1, 2, 3, 4},
@@ -166,7 +177,10 @@ class LargeStraight(Rule):
         self.name = "Large Straight"
 
     def points(self, hand: Hand) -> int:
-        values = sorted(set(die.get_value() for die in hand.dice))
+        values = set ()
+        for die in hand.dice:
+            values.add(die.get_value())
+        values = sorted(values)
 
         if values in ([1, 2, 3, 4, 5], [2, 3, 4, 5, 6]):
             return 40
@@ -204,4 +218,7 @@ class Chance(Rule):
         self.name = "Chance"
 
     def points(self, hand: Hand) -> int:
-        return sum(die.get_value() for die in hand.dice)
+        total = 0
+        for die in hand.dice:
+            total += die.get_value()
+        return total

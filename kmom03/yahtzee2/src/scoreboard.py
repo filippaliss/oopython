@@ -24,7 +24,11 @@ class Scoreboard:
         """
         Returnerar den totala summan av alla poäng.
         """
-        return sum(score for score in self.scores.values() if score >= 0)
+        total = 0
+        for scores in self.scores.values():
+            if scores >= 0:
+                total += scores
+        return total
 
     def add_points(self, rule_name, hand):
         """
@@ -47,7 +51,10 @@ class Scoreboard:
         """
         Returnerar True om alla regler har fått poäng.
         """
-        return all(rule in self.scores and self.scores[rule] >= 0 for rule in self.rules)
+        for rule in self.rules:
+            if rule not in self.scores or self.scores[rule] < 0:
+                return False
+        return True
 
     @classmethod
     def from_dict(cls, points: dict[str, int]) -> 'Scoreboard':
