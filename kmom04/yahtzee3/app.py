@@ -28,5 +28,10 @@ def about():
     """
     return render_template('about.html')
 
+@app.route("/reset")
+def reset():
+    hand = Hand()
+    return render_template('index.html', hand=hand)
+
 if __name__ == '__main__':
     app.run(debug=True)
