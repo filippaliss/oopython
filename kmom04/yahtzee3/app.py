@@ -46,9 +46,10 @@ def about():
 
 @app.route("/reset")
 def reset():
-    hand = Hand()
     session.clear()
-    return render_template('index.html', hand=hand)
+    hand = Hand()
+    scoreboard = Scoreboard()
+    return render_template('index.html', hand=hand, scoreboard=scoreboard)
 
 @app.route("/choose_rule", methods=["POST"])
 def choose_rule():
