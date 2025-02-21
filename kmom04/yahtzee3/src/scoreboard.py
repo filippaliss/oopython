@@ -5,7 +5,7 @@ from src.rules import (
     Ones, Twos, Threes, Fours, Fives, Sixes,
     ThreeOfAKind, FourOfAKind, FullHouse, SmallStraight,
     LargeStraight, Yahtzee, Chance)
-
+import json
 class Scoreboard:
     """
     A class representing the Scoreboard for the game of Yahtzee.
@@ -63,4 +63,15 @@ class Scoreboard:
         """
         scoreboard = cls()
         scoreboard.scores = points
+        return scoreboard
+    
+    def to_json(self):
+        return json.dumps(self.scores)
+
+    # Deserialisering: omvandla JSON tillbaka till ett Scoreboard-objekt
+    @classmethod
+    def from_json(cls, json_data):
+        data = json.loads(json_data)
+        scoreboard = cls()
+        scoreboard.scores = data
         return scoreboard
