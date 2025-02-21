@@ -1,4 +1,5 @@
 {% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 <div class="container" role="main">
     <div class="page-header">
@@ -9,8 +10,38 @@
 
         {% for die in hand.dice %}
             <img src="{{ url_for('static', filename='img/' + die.get_name() + '.png') }}" alt="{{ die.get_name() }}" style="width: 60px; height: 60px;">
+            <input type="checkbox" name="reroll" value="{{loop.indes0}}">
         {% endfor %}
+        <br>
+        <button type="submit">Reroll Dice</button>
     </div>
+
+    <h3>Rules - Points: {{ total_points }}</h3>
+    <form method="POST" action="{{ url_for('choose_rule') }}">
+        <table>
+            <tr>
+                <th>Choose</th>
+                <th>Worth</th>
+                <th>Rule</th>
+                <th>Already scored</th>
+            </tr>
+            {% for rule_name, rule in scoreboard.rules.items() %}
+            <tr>
+                <td>
+                    {% if scoreboard.get_points(rule_name) == 0 %}
+                        <input type="radio" name="chosen_rule" value="{{ rule_name }}">
+                    {% else %}
+                        <input type="radio" name="chosen_rule" value="{{ rule_name }}" disabled>
+                    {% endif %}
+                </td>
+                <td>{{ rule.points(hand) }}</td>
+                <td>{{ rule_name }}</td>
+                <td>{{ scoreboard.scores.get(rule_name, '-') }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <button type="submit">Score</button>
+    </form>
 </div>
 
 {% include 'footer.html' %}
