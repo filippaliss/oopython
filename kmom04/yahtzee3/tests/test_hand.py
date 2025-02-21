@@ -29,7 +29,6 @@ class TestHand(unittest.TestCase):
         actual_values = hand.to_list()
         self.assertEqual(actual_values, expected_values)
 
-
     def test_create_hand_with_list_of_values(self):
         """
         Test creating a Hand object with an explicit list of dice values.
@@ -47,6 +46,31 @@ class TestHand(unittest.TestCase):
         hand = Hand(dice_values)
 
         self.assertEqual(hand.to_list(), dice_values)
+
+    def test_roll_selected_dice(self):
+        """
+        Test rolling only selected dice.
+        """
+        hand = Hand([1, 2, 3, 4, 5])
+        hand.roll([1, 3])
+
+        new_values = hand.to_list()
+        self.assertNotEqual(new_values[1], 2)
+        self.assertNotEqual(new_values[3], 4)
+        self.assertEqual(new_values[0], 1)
+        self.assertEqual(new_values[2], 3)
+        self.assertEqual(new_values[4], 5)
+
+    def test_roll_all_dice(self):
+        """
+        Test rolling all dice when no arguments are provided.
+        """
+        hand = Hand()
+        initial_values = hand.to_list()
+        hand.roll()
+        new_values = hand.to_list()
+
+        self.assertNotEqual(initial_values, new_values)
 
 if __name__ == '__main__':
     unittest.main()
