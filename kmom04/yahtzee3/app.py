@@ -6,7 +6,7 @@ from flask import Flask, render_template, session
 from src.scoreboard import Scoreboard
 from src.hand import Hand
 
-app = Flask(name)
+app = Flask(__name__)
 
 app.secret_key = 'zoeofilippaarsjalvmordsbenagnaochelinmed'
 
@@ -60,5 +60,5 @@ def choose_rule():
             flash(str(e), "error")
     return redirect(url_for("index"))
 
-if name == 'main':
+if __name__ == '__main__':
     app.run(debug=True)
