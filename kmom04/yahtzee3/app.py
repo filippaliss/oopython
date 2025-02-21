@@ -2,13 +2,12 @@
 Module to define the Hand class.
 """
 
-from flask import Flask, render_template, session
+from flask import Flask, render_template
 from src.scoreboard import Scoreboard
 from src.hand import Hand
 
 app = Flask(__name__)
 
-app.secret_key = 'zoeofilippaarsjalvmordsbenagnaochelinmed'
 
 @app.route("/")
 def main():
@@ -18,21 +17,9 @@ def main():
     Returns:
         str: Rendered HTML template.
     """
-    if "scoreboard" not in session:
-        # Skapa en ny Scoreboard om det inte finns i sessionen
-        scoreboard = Scoreboard()
-        session["scoreboard"] = scoreboard.to_json()  # Spara som JSON-sträng
-    else:
-        # Ladda Scoreboard från sessionen
-        scoreboard_data = session["scoreboard"]
-        scoreboard = Scoreboard.from_json(scoreboard_data)
-
-    if "hand" not in session:
-        session["hand"] = Hand().to_list()
-
-    hand = Hand(dice_values=session["hand"])
+    hand = Hand()
     scoreboard = Scoreboard()
-    return render_template('index.html', hand=hand, scoreboard=scoreboard)
+    return render_template('index.html', hand=hand)
 
 @app.route("/about")
 def about():
@@ -47,7 +34,6 @@ def about():
 @app.route("/reset")
 def reset():
     hand = Hand()
-    session.clear()
     return render_template('index.html', hand=hand)
 
 @app.route("/choose_rule", methods=["POST"])
