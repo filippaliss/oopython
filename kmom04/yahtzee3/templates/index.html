@@ -8,12 +8,16 @@
         </h1>
         <h3>The hand</h3>
 
-        {% for die in hand.dice %}
-            <img src="{{ url_for('static', filename='img/' + die.get_name() + '.png') }}" alt="{{ die.get_name() }}" style="width: 60px; height: 60px;">
-            <input type="checkbox" name="reroll" value="{{ loop.index0 }}">
+        <form method="POST" action="{{ url_for('reroll') }}">
+            {% for die in hand.dice %}
+                <img src="{{ url_for('static', filename='img/' + die.get_name() + '.png') }}" 
+                     alt="{{ die.get_name() }}" style="width: 60px; height: 60px;">
+                <input type="checkbox" name="reroll" value="{{ loop.index0 }}">
             {% endfor %}
-        <br>
-        <button type="submit">Reroll Dice</button>
+            <br>
+            <button type="submit">Reroll Dice</button>
+        </form>
+        
     </div>
 
     <h3>Rules - Points: {{ total_points }}</h3>

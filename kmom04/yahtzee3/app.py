@@ -72,5 +72,23 @@ def choose_rule():
 
     return redirect(url_for("main"))
 
+@app.route("/reroll", methods=["POST"])
+def reroll():
+    # Hämta nuvarande hand från sessionen
+    hand = Hand(dice_values=session.get("hand", []))
+
+    # Hämta vilka tärningar som ska slås om (de markerade checkboxarna)
+    reroll_indices = request.form.getlist("reroll")  # Hämtar lista med index (som strängar)
+    reroll_indices = [int(i) for i in reroll_indices]  # Konvertera till heltal
+
+    # Slå om de valda tärningarna
+    hand.roll(reroll_indices)
+
+    # Spara den uppdaterade handen i sessionen
+    session["hand"] = hand.to_list()
+
+    return redirect(url_for("main"))  # Ladda om sidan för att visa nya tärningar
+
+
 if __name__ == '__main__':
     app.run(debug=True)
