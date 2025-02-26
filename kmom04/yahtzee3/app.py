@@ -18,6 +18,8 @@ def main():
     Returns:
         str: Rendered HTML template.
     """
+    if 'reroll_count' not in session:
+        session['reroll_count'] = 0
     if "scoreboard" not in session:
         # Skapa en ny Scoreboard om det inte finns i sessionen
         scoreboard = Scoreboard()
@@ -31,7 +33,7 @@ def main():
         session["hand"] = Hand().to_list()
 
     hand = Hand(dice_values=session["hand"])
-    return render_template('index.html', hand=hand, scoreboard=scoreboard)
+    return render_template('index.html', hand=hand, scoreboard=scoreboard, reroll_count=session['reroll_count'])
 
 @app.route("/about")
 def about():
@@ -46,9 +48,11 @@ def about():
 @app.route("/reset")
 def reset():
     session.clear()
-    hand = Hand()
-    scoreboard = Scoreboard()
-    return render_template('index.html', hand=hand, scoreboard=scoreboard)
+    session['reroll_count'] = 0  # Återställ räknaren när en regel väljs
+    session['rule_selected'] = False
+    session["hand"] = Hand().to_list()  # Återställ tärningarna
+    session["scoreboard"] = Scoreboard().to_json()
+    return redirect(url_for("main"))
 
 @app.route("/choose_rule", methods=["POST"])
 def choose_rule():
@@ -67,13 +71,22 @@ def choose_rule():
     try:
         scoreboard.add_points(rule_name, hand)
         session["scoreboard"] = scoreboard.to_json()  # Spara tillbaka i sessionen
+        session["hand"] = Hand().to_list()  # Återställ handen för nästa runda
+        session['reroll_count'] = 0  # Återställ räknaren när en regel väljs
     except ValueError as e:
         flash(str(e), "error")
+    
 
     return redirect(url_for("main"))
 
 @app.route("/reroll", methods=["POST"])
 def reroll():
+    if 'reroll_count' not in session:
+        session['reroll_count'] = 0 
+
+    if session['reroll_count'] < 2:
+        session['reroll_count'] += 1
+        session.modified = True
     # Hämta nuvarande hand från sessionen
     hand = Hand(dice_values=session.get("hand", []))
 
