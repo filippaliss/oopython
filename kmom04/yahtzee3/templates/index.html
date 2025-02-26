@@ -36,9 +36,13 @@
             {% for rule_name, rule in scoreboard.rules.items() %}
             <tr>
                 <td>
-                    {% if scoreboard.get_points(rule_name) == 0 %}
+                    {% if scoreboard.scores.get(rule_name) is none %}
                         <input type="radio" name="chosen_rule" value="{{ rule_name }}">
+                    {% elif scoreboard.scores.get(rule_name) == 0 %}
+                        <!-- Gör regeln fortfarande tillgänglig för val om den är 0 poäng, men visa att den har valts -->
+                        <input type="radio" name="chosen_rule" value="{{ rule_name }}" disabled>
                     {% else %}
+                        <!-- Om regeln är poängsatt, inaktivera knappen -->
                         <input type="radio" name="chosen_rule" value="{{ rule_name }}" disabled>
                     {% endif %}
                 </td>

@@ -73,6 +73,10 @@ def choose_rule():
         session["scoreboard"] = scoreboard.to_json()  # Spara tillbaka i sessionen
         session["hand"] = Hand().to_list()  # Återställ handen för nästa runda
         session['reroll_count'] = 0  # Återställ räknaren när en regel väljs
+
+        if scoreboard.finished():
+            flash("All rules have been selected! Game over!", "success")
+
     except ValueError as e:
         flash(str(e), "error")
     

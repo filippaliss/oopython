@@ -64,6 +64,12 @@ class Scoreboard:
         scoreboard = cls()
         scoreboard.scores = points
         return scoreboard
+
+    def available_rules(self):
+        """
+        Returns a list of rules that haven't been used yet.
+        """
+        return [rule for rule, value in self.rules.items() if value is None]
     
     def to_json(self):
         return json.dumps(self.scores)
