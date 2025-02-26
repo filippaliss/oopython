@@ -2,7 +2,7 @@
 Module to define the Hand class.
 """
 
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, request, redirect, url_for, flash
 from src.scoreboard import Scoreboard
 from src.hand import Hand
 
@@ -31,7 +31,6 @@ def main():
         session["hand"] = Hand().to_list()
 
     hand = Hand(dice_values=session["hand"])
-    scoreboard = Scoreboard()
     return render_template('index.html', hand=hand, scoreboard=scoreboard)
 
 @app.route("/about")
@@ -53,13 +52,25 @@ def reset():
 
 @app.route("/choose_rule", methods=["POST"])
 def choose_rule():
-    rule_name = request.form.get("choose_rule")
-    if rule_name:
-        try:
-            scoreboard.add_points(rule_name, hand)
-        except ValueError as e:
-            flash(str(e), "error")
-    return redirect(url_for("index"))
+    rule_name = request.form.get("chosen_rule")  # Fixad namnförvirring här
+    if not rule_name:
+        flash("You must select a rule!", "error")
+        return redirect(url_for("main"))
+
+    # Ladda scoreboard från session
+    scoreboard_data = session.get("scoreboard", "{}")
+    scoreboard = Scoreboard.from_json(scoreboard_data)
+
+    # Ladda hand från session
+    hand = Hand(dice_values=session.get("hand", []))
+
+    try:
+        scoreboard.add_points(rule_name, hand)
+        session["scoreboard"] = scoreboard.to_json()  # Spara tillbaka i sessionen
+    except ValueError as e:
+        flash(str(e), "error")
+
+    return redirect(url_for("main"))
 
 if __name__ == '__main__':
     app.run(debug=True)

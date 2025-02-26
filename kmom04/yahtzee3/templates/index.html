@@ -10,8 +10,8 @@
 
         {% for die in hand.dice %}
             <img src="{{ url_for('static', filename='img/' + die.get_name() + '.png') }}" alt="{{ die.get_name() }}" style="width: 60px; height: 60px;">
-            <input type="checkbox" name="reroll" value="{{loop.indes0}}">
-        {% endfor %}
+            <input type="checkbox" name="reroll" value="{{ loop.index0 }}">
+            {% endfor %}
         <br>
         <button type="submit">Reroll Dice</button>
     </div>
