@@ -1,11 +1,12 @@
 """
 module that defines the Scoreboard class
 """
+import json
 from src.rules import (
     Ones, Twos, Threes, Fours, Fives, Sixes,
     ThreeOfAKind, FourOfAKind, FullHouse, SmallStraight,
     LargeStraight, Yahtzee, Chance)
-import json
+
 class Scoreboard:
     """
     A class representing the Scoreboard for the game of Yahtzee.
@@ -70,13 +71,19 @@ class Scoreboard:
         Returns a list of rules that haven't been used yet.
         """
         return [rule for rule, value in self.rules.items() if value is None]
-    
+
     def to_json(self):
+        """
+        dump score
+        """
         return json.dumps(self.scores)
 
-    # Deserialisering: omvandla JSON tillbaka till ett Scoreboard-objekt
     @classmethod
     def from_json(cls, json_data):
+        """
+        Deserialisering: omvandla JSON tillbaka till ett Scoreboard-objekt
+        
+        """
         data = json.loads(json_data)
         scoreboard = cls()
         scoreboard.scores = data
