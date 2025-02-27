@@ -24,7 +24,7 @@
         
     </div>
 
-    <h3>Rules - Points: {{ total_points }}</h3>
+    <h3>Rules - Points: {{ scoreboard.get_total_points() }}</h3>
     <form method="POST" action="{{ url_for('choose_rule') }}">
         <table>
             <tr>
