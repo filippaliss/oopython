@@ -75,7 +75,8 @@ def choose_rule():
         session['reroll_count'] = 0  # Återställ räknaren när en regel väljs
 
         if scoreboard.finished():
-            flash("All rules have been selected! Game over!", "success")
+            flash(f"All rules have been selected! Game over!, success your total score was {scoreboard.get_total_points()} Great job!", "end")
+            return redirect(url_for("main"))
 
     except ValueError as e:
         flash(str(e), "error")

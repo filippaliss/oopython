@@ -147,3 +147,31 @@ footer a:hover {
         font-size: 12px; /* Mindre fontstorlek på små skärmar */
     }
 }
+
+.flashes {
+    list-style-type: none;
+    padding: 0;
+}
+
+.flashes .error {
+    background-color: #ffcccb;
+    color: #a94442;
+    padding: 15px;
+    border: 2px solid #a94442;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.flashes .end {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    padding: 15px;
+    border: 2px solid #0c5460;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    text-align: center;
+}
+
