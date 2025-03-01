@@ -1,0 +1,177 @@
+/* Grundläggande styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+    padding-top: 60px; /* Lägger till utrymme för navbar */
+}
+
+/* Huvudcontainer */
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header / Navbar */
+.navbar-inverse {
+    background-color: #343a40; /* Mörk bakgrund */
+    border-color: #343a40;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #000000; 
+    font-size: 16px;
+    padding: 15px 20px;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > .active > a {
+    background-color: #555; /* Hover-effekt */
+    color: #fff;
+}
+
+.navbar-inverse .navbar-toggle {
+    border-color: #555;
+}
+
+.navbar-brand {
+    color: #ffffff; /* Vit textfärg för brand */
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar-brand:hover {
+    color: #28a745; /* Hover på branden */
+}
+
+/* Sidhuvud */
+h1 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Tärningsdisplay */
+.page-header {
+    text-align: center;
+}
+
+.page-header img {
+    margin: 5px;
+    width: 60px;
+    height: 60px;
+}
+
+.page-header input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Knappar */
+button {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Poängtabell */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #343a40;
+    color: white;
+}
+
+td input[type="radio"] {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+/* Footer */
+footer {
+    background-color: #343a40; /* Mörk bakgrund */
+    color: #ffffff; /* Vit textfärg */
+    padding: 20px 0;
+    font-size: 14px;
+    text-align: center;
+}
+
+footer a {
+    color: #28a745; /* Länk-färg */
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline; /* Hover-effekt på länkar */
+}
+
+/* Responsivitet */
+@media (max-width: 767px) {
+    .navbar-inverse .navbar-nav > li > a {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+
+    footer {
+        font-size: 12px; /* Mindre fontstorlek på små skärmar */
+    }
+}
+
+.flashes {
+    list-style-type: none;
+    padding: 0;
+}
+
+.flashes .error {
+    background-color: #ffcccb;
+    color: #a94442;
+    padding: 15px;
+    border: 2px solid #a94442;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.flashes .end {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    padding: 15px;
+    border: 2px solid #0c5460;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    text-align: center;
+}
+
