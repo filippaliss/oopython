@@ -33,8 +33,10 @@ def main():
         session["hand"] = Hand().to_list()
 
     hand = Hand(dice_values=session["hand"])
+    game_over = session.get('game_over', False)
     return render_template('index.html', hand=hand,
-                           scoreboard=scoreboard, reroll_count=session['reroll_count'])
+                           scoreboard=scoreboard, reroll_count=session['reroll_count'],
+                           game_over=game_over)
 
 @app.route("/about")
 def about():
@@ -81,6 +83,7 @@ def choose_rule():
         session['reroll_count'] = 0
 
         if scoreboard.finished():
+            session['game_over'] = True
             flash(f"""All rules have been selected! Game over!
             Your total score was {scoreboard.get_total_points()}.
             Great job!""", "end")
@@ -112,6 +115,21 @@ def reroll():
     session["hand"] = hand.to_list()
 
     return redirect(url_for("main"))
+
+@app.route("/submit", methods=["POST"])
+def submit_score():
+    """
+        Lägger till spelarens poäng i leaderboarden och sparar till filen.
+    """
+    name = request.form["name"]
+    score = int(request.form["score"])
+
+    with open("leaderboard.txt", "a") as f:
+        f.write(f"{name}: {score}\n")
+
+    session.clear()
+    return redirect(url_for("main"))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
