@@ -1,3 +1,7 @@
+"""
+Definierar anpassade undantagsklasser för att hantera saknade index och värden i en lista.
+"""
+
 class MissingIndex(Exception):
     """
     undantag om index saknas
