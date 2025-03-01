@@ -17,10 +17,10 @@
             <td>{{ player }}</td>
             <td>{{ score }}</td>
             <td>
-                <form action="{% url 'delete_player' player %}" method="post">
-                    {% csrf_token %}
+                <form action="{{ url_for('remove_player', player=player) }}" method="post">
+                    {{ form.hidden_tag() }}
                     <button type="submit">Ta bort</button>
-                </form>
+                </form>                
             </td>
         </tr>
         {% endfor %}

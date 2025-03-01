@@ -134,6 +134,9 @@ def submit_score():
 def leaderboard():
     return render_template('leaderboard.html')
 
+@app.route('/remove_player/<player>', methods=['POST'])
+def remove_player(player):
+    return redirect(url_for('leaderboard'))
 
 if __name__ == '__main__':
     app.run(debug=True)
