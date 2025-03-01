@@ -27,21 +27,24 @@
         {% endif %}
         {% endwith %}
 
-        <h3>The hand</h3>
-        <p>Tryck i de tärningar du vill slå om!</p>
-        <form method="POST" action="{{ url_for('reroll') }}">
-            {% for die in hand.dice %}
-                <img src="{{ url_for('static', filename='img/' + die.get_name() + '.png') }}" 
-                     alt="{{ die.get_name() }}" style="width: 60px; height: 60px;">
-                <input type="checkbox" name="reroll" value="{{ loop.index0 }}">
-            {% endfor %}
-            <br>
-            {% if reroll_count < 2 %}
-            <button type="submit">Reroll Dice</button>
-            {% else %}
-            <p>Max två omkastningar! Välj en regel för att fortsätta.</p>
-            {% endif %}        
-        </form>
+        {% if not game_over %}
+            <h3>The hand</h3>
+            <p>Tryck i de tärningar du vill slå om!</p>
+            <form method="POST" action="{{ url_for('reroll') }}">
+                {% for die in hand.dice %}
+                    <img src="{{ url_for('static', filename='img/' + die.get_name() + '.png') }}" 
+                        alt="{{ die.get_name() }}" style="width: 60px; height: 60px;">
+                    <input type="checkbox" name="reroll" value="{{ loop.index0 }}">
+                {% endfor %}
+                <br>
+                {% if reroll_count < 2 %}
+                <button type="submit">Reroll Dice</button>
+                {% else %}
+                <p>Max två omkastningar! Välj en regel för att fortsätta.</p>
+                {% endif %}        
+            </form>
+        {% endif %}
+
         
     </div>
 

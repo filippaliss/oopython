@@ -140,16 +140,16 @@ def load_leaderboard():
         with open("leaderboard.txt", "r") as f:
             for line in f:
                 name, score = line.strip().split(": ")
-                players.append((name, int(score)))  # Konvertera poäng till int
+                players.append((name, int(score)))
     except FileNotFoundError:
-        pass  # Om filen inte finns, returnera en tom lista
+        pass
 
-    return sorted(players, key=lambda x: x[1], reverse=True)  # Sortera fallande
+    return sorted(players, key=lambda x: x[1], reverse=True)
 
 @app.route('/leaderboard')
 def leaderboard():
     players = load_leaderboard()
-    form = DeleteForm()  # Skapa en instans av formuläret
+    form = DeleteForm()
     return render_template('leaderboard.html', players=players, num_entries=len(players), form=form)
 
 @app.route('/remove_player/<player>', methods=['POST'])
