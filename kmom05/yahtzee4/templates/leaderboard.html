@@ -1,8 +1,12 @@
 {% include 'header.html' %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-<h1>Topplista</h1>
-<p>Antal sparade inlägg: {{ num_entries }}</p>
+<div class="page-header">
+    <h1>
+        Topplista
+    </h1>
+    <p>Antal sparade inlägg: {{ num_entries }}</p>
+</div>
 
 <table>
     <thead>
