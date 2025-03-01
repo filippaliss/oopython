@@ -4,6 +4,7 @@ Module to define the Hand class.
 
 from flask import Flask, render_template, session, request, redirect, url_for, flash
 from src.scoreboard import Scoreboard
+from src.forms import DeleteForm
 from src.hand import Hand
 
 app = Flask(__name__)
@@ -130,13 +131,40 @@ def submit_score():
     session.clear()
     return redirect(url_for("main"))
 
+def load_leaderboard():
+    """
+    Läser in leaderboard.txt och returnerar en lista av tuples (namn, poäng)
+    """
+    players = []
+    try:
+        with open("leaderboard.txt", "r") as f:
+            for line in f:
+                name, score = line.strip().split(": ")
+                players.append((name, int(score)))
+    except FileNotFoundError:
+        pass
+
+    return sorted(players, key=lambda x: x[1], reverse=True)
+
 @app.route('/leaderboard')
 def leaderboard():
-    return render_template('leaderboard.html')
+    players = load_leaderboard()
+    form = DeleteForm()
+    return render_template('leaderboard.html', players=players, num_entries=len(players), form=form)
 
 @app.route('/remove_player/<player>', methods=['POST'])
 def remove_player(player):
+    form = DeleteForm()
+    if form.validate_on_submit():
+        players = load_leaderboard()
+        new_players = [(p, s) for p, s in players if p != player]
+
+        with open("leaderboard.txt", "w") as f:
+            for name, score in new_players:
+                f.write(f"{name}: {score}\n")
+
     return redirect(url_for('leaderboard'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
