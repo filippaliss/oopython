@@ -1,9 +1,11 @@
+from unorderedlist import UnorderedList
+
 """
 leaderboard filen, Hålla reda på spelarnas namn och poäng i en leaderboard.
 """
 class Leaderboard:
     def __init__(self):
-        self.players = UnordedList()
+        self.players = UnorderedList()
 
     def add_player(self, name, score):
         """
