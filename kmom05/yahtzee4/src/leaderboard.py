@@ -1,9 +1,12 @@
 """
 leaderboard filen, Hålla reda på spelarnas namn och poäng i en leaderboard.
 """
-from unorderedlist import UnorderedList
+from src.unorderedlist import UnorderedList
 
 class Leaderboard:
+    """
+    Hantera leaderboarden genom att lagra, sortera och spara spelare baserat på poäng.
+    """
     def __init__(self):
         self.players = UnorderedList()
 
@@ -17,7 +20,7 @@ class Leaderboard:
         """
             Tar bort en spelare från listan baserat på namn
         """
-        for player in self.players.itmes:
+        for player in self.players.items:
             if player[0] == name:
                 self.players.remove(player)
                 break
@@ -29,7 +32,7 @@ class Leaderboard:
         sorted_players = self.sort_players_by_score(self.players.items)
         return sorted_players
 
-   def sort_players_by_score(self, players):
+    def sort_players_by_score(self, players):
         """
         Sortera spelarna baserat på poäng i fallande ordning.
         """
@@ -50,6 +53,6 @@ class Leaderboard:
         """
             Spara leaderboarden till en fil
         """
-        with open("leaderboard.txt", "w") as f:
+        with open("leaderboard.txt", "w", encoding="utf-8") as f:
             for player in self.players.items:
                 f.write(f"{player[0]}: {player[1]}\n")
