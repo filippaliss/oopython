@@ -2,6 +2,8 @@
     UnorderedList filen, som implementerar en enkel oordnad lista med
     metoder för att lägga till, hämta och ta bort element.
 """
+from errors import MissingIndex, MissingValue
+
 class UnorderedList:
     def __init__(self):
         self.items = []
