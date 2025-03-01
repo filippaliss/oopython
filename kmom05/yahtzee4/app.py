@@ -130,6 +130,10 @@ def submit_score():
     session.clear()
     return redirect(url_for("main"))
 
+@app.route('/leaderboard')
+def leaderboard():
+    return render_template('leaderboard.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
