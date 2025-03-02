@@ -1,0 +1,82 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<div class="container" role="main">
+    <div class="page-header">
+        <h1>
+            Yahtzee
+        </h1>
+
+        {% if game_over %}
+            <h2>Submit your score?</h2>
+            <form action="/submit" method="post">
+                <label for="name">Ditt namn:</label>
+                <input type="text" id="name" name="name" required>
+                <input type="hidden" name="score" value="{{ scoreboard.get_total_points() }}">
+                <button type="submit">Spara poäng</button>
+            </form>
+        {% endif %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+
+        {% if not game_over %}
+            <h3>The hand</h3>
+            <p>Tryck i de tärningar du vill slå om!</p>
+            <form method="POST" action="{{ url_for('reroll') }}">
+                {% for die in hand.dice %}
+                    <img src="{{ url_for('static', filename='img/' + die.get_name() + '.png') }}" 
+                        alt="{{ die.get_name() }}" style="width: 60px; height: 60px;">
+                    <input type="checkbox" name="reroll" value="{{ loop.index0 }}">
+                {% endfor %}
+                <br>
+                {% if reroll_count < 2 %}
+                <button type="submit">Reroll Dice</button>
+                {% else %}
+                <p>Max två omkastningar! Välj en regel för att fortsätta.</p>
+                {% endif %}        
+            </form>
+        {% endif %}
+
+        
+    </div>
+
+    <h3>Rules - Points: {{ scoreboard.get_total_points() }}</h3>
+    <form method="POST" action="{{ url_for('choose_rule') }}">
+        <table>
+            <tr>
+                <th>Choose</th>
+                <th>Worth</th>
+                <th>Rule</th>
+                <th>Already scored</th>
+            </tr>
+            {% for rule_name, rule in scoreboard.rules.items() %}
+            <tr>
+                <td>
+                    {% if scoreboard.scores.get(rule_name) is none %}
+                        <input type="radio" name="chosen_rule" value="{{ rule_name }}">
+                    {% elif scoreboard.scores.get(rule_name) == 0 %}
+                        <input type="radio" name="chosen_rule" value="{{ rule_name }}" disabled>
+                    {% else %}
+                        <input type="radio" name="chosen_rule" value="{{ rule_name }}" disabled>
+                    {% endif %}
+                </td>
+                <td>{{ rule.points(hand) }}</td>
+                <td>{{ rule_name }}</td>
+                <td>{{ scoreboard.scores.get(rule_name, '-') }}</td>
+            </tr>
+            {% endfor %}
+            
+        </table>
+        <button type="submit">Score</button>
+    </form>
+</div>
+
+{% include 'footer.html' %}
