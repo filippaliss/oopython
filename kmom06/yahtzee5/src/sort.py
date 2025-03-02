@@ -10,3 +10,16 @@ Sorteringsalgoritmerna ska fungera oberoende av vilken data som sparas i Unorder
 
 Använd din rekursiva insertion sort för att sortera UnorderedList i topplista vyn. Sortera på antalet poäng.
 """
+
+def insertion_sort(items):
+    """ Insertion sort """
+    for i in range(1, len(items)):
+        j = i
+        while j > 0 and items[j] < items[j-1]:
+            items[j], items[j-1] = items[j-1], items[j]
+            j -= 1
+
+    return items
+
+def recursive_insertion():
+    return -1

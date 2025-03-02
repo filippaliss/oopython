@@ -7,3 +7,26 @@ Jag rekommenderar att skapa en to_list() metod i Queue klassen så ni enkelt kan
 Och en metod så ni kan återskapa Queue klassen från session datan.
 Ni får inte ändra mer i Queue klassen. Den ska uppfylla metoderna för en abstrak Queue klass. Den ska inte implementeras för att specifik hålla två spelare.
 """
+
+class Queue:
+    def __init__(self):
+        self._items = []
+
+    def is_empty(self):
+        return self._items == []
+
+    def enqueue(self, item):
+        self._items.append(item)
+
+    def dequeue(self):
+        try:
+            return self._items.pop(0)
+
+        except IndexError:
+            return "Empty list."
+
+    def peek(self):
+        return self._items[0]
+
+    def size(self):
+        return len(self._items)
