@@ -52,12 +52,15 @@ dbwebb.ready_to_begin()
 # Write your code below and put the answer into the variable ANSWER.
 #
 
+def sum(start, end):
+    total_sum = 0
+    for number in range(start, end + 1):
+        total_sum += number
+    return total_sum
 
 
 
-
-
-ANSWER = "Replace this text with the variable holding the answer."
+ANSWER = sum(13, 32)
 
 # I will now test your answer - change false to true to get a hint.
 dbwebb.assert_equal("1.1", ANSWER, False)
@@ -74,12 +77,22 @@ dbwebb.assert_equal("1.1", ANSWER, False)
 # Write your code below and put the answer into the variable ANSWER.
 #
 
+def find_max(lst):
+    if len(lst) == 1:
+        return lst[0]
+    
+    max_of_rest = find_max(lst[1:])
+    
+    if lst[0] > max_of_rest:
+        return lst[0]
+    else:
+        return max_of_rest
+
+numbers = [4, 5, 6, 11, 9, 1, 2, 3, 8]
 
 
 
-
-
-ANSWER = "Replace this text with the variable holding the answer."
+ANSWER = find_max(numbers)
 
 # I will now test your answer - change false to true to get a hint.
 dbwebb.assert_equal("1.2", ANSWER, False)
@@ -96,14 +109,18 @@ dbwebb.assert_equal("1.2", ANSWER, False)
 #
 # Write your code below and put the answer into the variable ANSWER.
 #
+def find_index(lst, numret, index=0):
+    if len(lst) == 0:
+        return -1
+    
+    if lst[0] == numret:
+        return index
+    
+    return find_index(lst[1:], numret, index + 1)
 
+numbers = [4, 5, 6, 11, 9, 1, 2, 3, 8]
 
-
-
-
-
-ANSWER = "Replace this text with the variable holding the answer."
-
+ANSWER = find_index(numbers, 1)
 # I will now test your answer - change false to true to get a hint.
 dbwebb.assert_equal("1.3", ANSWER, False)
 
@@ -123,7 +140,7 @@ dbwebb.assert_equal("1.3", ANSWER, False)
 
 
 
-ANSWER = "Replace this text with the variable holding the answer."
+ANSWER = find_index(numbers, 10)
 
 # I will now test your answer - change false to true to get a hint.
 dbwebb.assert_equal("1.4", ANSWER, False)
@@ -139,12 +156,16 @@ dbwebb.assert_equal("1.4", ANSWER, False)
 # Write your code below and put the answer into the variable ANSWER.
 #
 
+def power_of_ten(exponent):
+    if exponent == 0:
+        return 1
+    else:
+        return 10 * power_of_ten(exponent - 1)
 
 
 
 
-
-ANSWER = "Replace this text with the variable holding the answer."
+ANSWER = power_of_ten(7)
 
 # I will now test your answer - change false to true to get a hint.
 dbwebb.assert_equal("1.5", ANSWER, False)
@@ -159,13 +180,13 @@ dbwebb.assert_equal("1.5", ANSWER, False)
 #
 # Write your code below and put the answer into the variable ANSWER.
 #
+def reverse_str(s):
+    if len(s) == 0:
+        return s
+    else:
+        return s[-1] + reverse_str(s[:-1])
 
-
-
-
-
-
-ANSWER = "Replace this text with the variable holding the answer."
+ANSWER = reverse_str("Backwards")
 
 # I will now test your answer - change false to true to get a hint.
 dbwebb.assert_equal("1.6", ANSWER, False)
@@ -182,13 +203,17 @@ dbwebb.assert_equal("1.6", ANSWER, False)
 #
 # Write your code below and put the answer into the variable ANSWER.
 #
+def beräkna_gcd(tal1, tal2):
+    if tal2 == 0:
+        return tal1
+    else:
+        return beräkna_gcd(tal2, tal1 % tal2)
+
+def beräkna_lcm(tal1, tal2):
+    return (tal1 * tal2) // beräkna_gcd(tal1, tal2)
 
 
-
-
-
-
-ANSWER = "Replace this text with the variable holding the answer."
+ANSWER = beräkna_lcm(9, 5)
 
 # I will now test your answer - change false to true to get a hint.
 dbwebb.assert_equal("1.7", ANSWER, False)
