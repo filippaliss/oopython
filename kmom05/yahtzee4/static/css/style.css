@@ -118,6 +118,44 @@ td input[type="radio"] {
     cursor: pointer;
 }
 
+/* Leaderborde */
+.leaderboard-list {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 20px;
+    text-align: center;
+    list-style: none;
+    padding: 0px 38%;
+}
+
+.player-name {
+    padding: 8px;
+    text-align: center;
+}
+
+.player_score {
+    padding: 8px;
+    text-align: center;
+}
+
+li {
+    background-color: white;
+    color: 343a40;
+    display: block;
+    width: fit-content;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+
+}
+
+
+.del input[type="radio"] {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
 /* Footer */
 footer {
     background-color: #343a40; /* Mörk bakgrund */
