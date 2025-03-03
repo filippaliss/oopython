@@ -28,3 +28,6 @@ class Queue:
 
     def size(self):
         return len(self._items)
+
+    def to_list(self):
+        return self._items.copy()  
