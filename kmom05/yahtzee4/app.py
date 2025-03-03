@@ -126,7 +126,7 @@ def submit_score():
     players = load_leaderboard()
 
     players.append((name, score))
-    players = sorted(players, key=lambda x: x[1], reverse=True)
+
 
     with open("leaderboard.txt", "w", encoding="utf-8") as f:
         for player in players:
@@ -151,7 +151,7 @@ def load_leaderboard():
     except FileNotFoundError:
         pass
 
-    return sorted(players, key=lambda x: x[1], reverse=True)
+    return players
 
 @app.route('/leaderboard')
 def leaderboard():
