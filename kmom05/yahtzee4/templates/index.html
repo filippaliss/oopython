@@ -9,7 +9,7 @@
 
         {% if game_over %}
             <h2>Submit your score?</h2>
-            <form action="/submit" method="post">
+            <form method="POST" action="{{ url_for('submit') }}">
                 <label for="name">Ditt namn:</label>
                 <input type="text" id="name" name="name" required>
                 <input type="hidden" name="score" value="{{ scoreboard.get_total_points() }}">
