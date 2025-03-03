@@ -11,15 +11,53 @@ Sorteringsalgoritmerna ska fungera oberoende av vilken data som sparas i Unorder
 Använd din rekursiva insertion sort för att sortera UnorderedList i topplista vyn. Sortera på antalet poäng.
 """
 
-def insertion_sort(items):
-    """ Insertion sort """
-    for i in range(1, len(items)):
-        j = i
-        while j > 0 and items[j] < items[j-1]:
-            items[j], items[j-1] = items[j-1], items[j]
-            j -= 1
+# def insertion_sort(items):
+#     """ Insertion sort """
+#     for i in range(1, len(items)):
+#         j = i
+#         while j > 0 and items[j] < items[j-1]:
+#             items[j], items[j-1] = items[j-1], items[j]
+#             j -= 1
 
-    return items
+#     return items
 
-def recursive_insertion():
-    return -1
+def recursive_insertion(unsorted_list, current_node):
+    """
+    Rekursiv insertion sort för UnorderedList.
+    Den här funktionen sorterar listan genom att iterera genom den och införa varje nod på rätt plats i den sorterade delen av listan.
+    """
+
+    # Basfall: Om det inte finns några fler noder att sortera, stoppa rekursionen
+    if current_node is None or current_node.next is None:
+        return unsorted_list
+
+    # Ta nästa nod för att sortera den
+    next_node = current_node.next
+
+    # Införa den aktuella noden på rätt plats i den sorterade listan
+    unsorted_list.head = insert_in_sorted_list(unsorted_list.head, current_node)
+
+    # Rekursivt sortera resten av listan
+    return recursive_insertion(unsorted_list, next_node)
+
+def insert_in_sorted_list(sorted_head, new_node):
+    """
+    Hjälpfunktion för att sätta in en nod i en redan sorterad lista.
+    Denna funktion säkerställer att vi håller listan sorterad.
+    """
+    
+    # Om listan är tom eller om den nya nodens score är större än den första nodens score
+    if sorted_head is None or new_node.data.score > sorted_head.data.score:
+        new_node.next = sorted_head
+        return new_node
+
+    # Annars, gå igenom listan för att hitta rätt plats
+    current = sorted_head
+    while current.next is not None and current.next.data.score >= new_node.data.score:
+        current = current.next
+
+    # Sätt in den nya noden på rätt plats
+    new_node.next = current.next
+    current.next = new_node
+
+    return sorted_head
