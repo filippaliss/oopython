@@ -58,26 +58,3 @@ def insert_in_sorted_list(sorted_head, new_node):
     current.next = new_node
 
     return sorted_head
-
-
-# def insert_in_sorted_list(sorted_head, new_node):
-#     """
-#     Hjälpfunktion för att sätta in en nod i en redan sorterad lista.
-#     Denna funktion säkerställer att vi håller listan sorterad.
-#     """
-    
-#     # Om listan är tom eller om den nya nodens score är större än den första nodens score
-#     if sorted_head is None or new_node.data.score > sorted_head.data.score:
-#         new_node.next = sorted_head
-#         return new_node
-
-#     # Annars, gå igenom listan för att hitta rätt plats
-#     current = sorted_head
-#     while current.next is not None and current.next.data.score >= new_node.data.score:
-#         current = current.next
-
-#     # Sätt in den nya noden på rätt plats
-#     new_node.next = current.next
-#     current.next = new_node
-
-#     return sorted_head

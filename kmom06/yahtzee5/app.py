@@ -134,8 +134,11 @@ def submit_score():
     # Lägg till den nya noden i leaderboard
     players.append(new_node)
 
-    # Sortera listan baserat på spelarens poäng
-    players.sort(key=lambda x: x.score, reverse=True)
+    # Sortera listan baserat på spelarens poäng (utan lambda)
+    def get_score(player):
+        return player.score
+
+    players.sort(key=get_score, reverse=True)
 
     # Skriv tillbaka den sorterade leaderboarden till filen
     with open("leaderboard.txt", "w", encoding="utf-8") as f:
@@ -145,7 +148,6 @@ def submit_score():
     # Töm session och redirect
     session.clear()
     return redirect(url_for("main"))
-
 
 def load_leaderboard():
     """
