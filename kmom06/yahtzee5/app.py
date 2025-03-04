@@ -5,6 +5,8 @@ Module to define the Hand class.
 from flask import Flask, render_template, session, request, redirect, url_for, flash
 from src.scoreboard import Scoreboard
 from src.hand import Hand
+from src.unorderedlist import Node
+from src.sort import recursive_insertion
 
 app = Flask(__name__)
 
@@ -123,38 +125,46 @@ def submit_score():
     name = request.form["name"]
     score = int(request.form["score"])
 
+    # Läs in leaderboard från filen
     players = load_leaderboard()
 
-    players.append((name, score))
-    players = sorted(players, key=lambda x: x[1], reverse=True)
+    # Skapa en ny nod för den nya spelaren
+    new_node = Node(name, score)
 
+    # Lägg till den nya noden i leaderboard
+    players.append(new_node)
+
+    # Sortera listan baserat på spelarens poäng
+    players.sort(key=lambda x: x.score, reverse=True)
+
+    # Skriv tillbaka den sorterade leaderboarden till filen
     with open("leaderboard.txt", "w", encoding="utf-8") as f:
         for player in players:
-            f.write(f"{player[0]}: {player[1]}\n")
+            f.write(f"{player.name}: {player.score}\n")
 
+    # Töm session och redirect
     session.clear()
     return redirect(url_for("main"))
 
 
 def load_leaderboard():
     """
-    Läser in leaderboard.txt och returnerar en lista med tuples (namn, poäng).
+    Läser in leaderboard.txt och returnerar en lista med spelarnoder.
     """
     players = []
     try:
-        players = []
         with open("leaderboard.txt", "r", encoding="utf-8") as f:
             for line in f:
                 name, score = line.strip().split(": ")
-                players.append((name, int(score)))
-
+                # Skapa en ny Node med name och score
+                players.append(Node(name, int(score)))
     except FileNotFoundError:
         pass
 
-    return sorted(players, key=lambda x: x[1], reverse=True)
+    return players
 
 @app.route('/leaderboard')
-def leaderboard():
+def show_leaderboard():
     """
     Visar leaderboard-sidan med spelarpoäng och ett formulär för att ta bort spelare.
     """

@@ -8,10 +8,10 @@
     </div>
 
     <ul class="leaderboard-list">
-        {% for player, score in players %}
+        {% for node in players %}
             <li>
-                <span class="player-name">{{ player }}</span> - 
-                <span class="player-score">{{ score }}</span>
+                <span class="player-name">{{ node.name }}</span> - 
+                <span class="player-score">{{ node.score }}</span>
                 <form class="del" action="{{ url_for('remove_player', player=player) }}" method="POST" style="display:inline;">
                     <button type="submit">Ta bort</button>
                 </form>
