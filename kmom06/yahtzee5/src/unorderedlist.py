@@ -4,18 +4,30 @@
 """
 from src.errors import MissingIndex, MissingValue
 
+class Node:
+    def __init__(self, name, score):
+        self.name = name  # Lagra namn
+        self.score = score  # Lagra poäng
+        self.next = None  # Nästa nod, initialiseras som None
+
+
 class UnorderedList:
     """
     A class representing the UnorderedList.
     """
     def __init__(self):
-        self.items = []
+        self.head = None
 
-    def append(self, value):
-        """
-        Adds a value to the list.
-        """
-        self.items.append(value)
+    def append(self, name, score):
+        """Lägger till en ny spelare i listan."""
+        new_node = Node(name, score)
+        if self.head is None:
+            self.head = new_node
+        else:
+            current = self.head
+            while current.next:
+                current = current.next
+            current.next = new_node
 
     def add(self, value):
         """
@@ -56,9 +68,21 @@ class UnorderedList:
 
     def print_list(self):
         """
-        Prints all the elements in the list.
+        Skriver ut hela listan.
         """
-        print(self.items)
+        current = self.head
+        while current:
+            print(f"{current.data[0]}: {current.data[1]}")
+            current = current.next
+
+    def to_list(self):
+        """Konverterar länkade listan till en vanlig lista (för att spara till fil)."""
+        result = []
+        current = self.head
+        while current:
+            result.append(current.data)
+            current = current.next
+        return result
 
     def set(self, index, value):
         """
