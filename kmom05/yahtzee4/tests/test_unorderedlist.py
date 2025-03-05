@@ -46,8 +46,15 @@ class TestUnorderedList(unittest.TestCase):
         self.ulist.add(20)
         self.ulist.add(30)
         self.ulist.remove(20)
-        self.assertNotIn(20, self.ulist.items)
-        self.assertEqual(self.ulist.items, [10, 30])
+
+        elements = []
+        current = self.ulist.head
+        while current:
+            elements.append(current.value)
+            current = current.next
+
+        self.assertNotIn(20, elements)
+        self.assertEqual(elements, [10, 30])
 
 if __name__ == "__main__":
     unittest.main()
