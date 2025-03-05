@@ -5,8 +5,6 @@ Module to define the Hand class.
 from flask import Flask, render_template, session, request, redirect, url_for, flash
 from src.scoreboard import Scoreboard
 from src.hand import Hand
-from src.unorderedlist import Node
-from src.sort import recursive_insertion
 
 app = Flask(__name__)
 
@@ -125,48 +123,38 @@ def submit_score():
     name = request.form["name"]
     score = int(request.form["score"])
 
-    # Läs in leaderboard från filen
     players = load_leaderboard()
 
-    # Skapa en ny nod för den nya spelaren
-    new_node = Node(name, score)
+    players.append((name, score))
 
-    # Lägg till den nya noden i leaderboard
-    players.append(new_node)
 
-    # Sortera listan baserat på spelarens poäng (utan lambda)
-    def get_score(player):
-        return player.score
-
-    players.sort(key=get_score, reverse=True)
-
-    # Skriv tillbaka den sorterade leaderboarden till filen
     with open("leaderboard.txt", "w", encoding="utf-8") as f:
         for player in players:
-            f.write(f"{player.name}: {player.score}\n")
+            f.write(f"{player[0]}: {player[1]}\n")
 
-    # Töm session och redirect
     session.clear()
     return redirect(url_for("main"))
 
+
 def load_leaderboard():
     """
-    Läser in leaderboard.txt och returnerar en lista med spelarnoder.
+    Läser in leaderboard.txt och returnerar en lista med tuples (namn, poäng).
     """
     players = []
     try:
+        players = []
         with open("leaderboard.txt", "r", encoding="utf-8") as f:
             for line in f:
                 name, score = line.strip().split(": ")
-                # Skapa en ny Node med name och score
-                players.append(Node(name, int(score)))
+                players.append((name, int(score)))
+
     except FileNotFoundError:
         pass
 
     return players
 
 @app.route('/leaderboard')
-def show_leaderboard():
+def leaderboard():
     """
     Visar leaderboard-sidan med spelarpoäng och ett formulär för att ta bort spelare.
     """

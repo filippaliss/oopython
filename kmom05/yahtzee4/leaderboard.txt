@@ -1,5 +1,4 @@
 Zoë: 181
 Filippa: 172
 test2: 116
-test: 49
 test3: 161
