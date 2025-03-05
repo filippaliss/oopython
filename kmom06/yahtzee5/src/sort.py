@@ -11,50 +11,37 @@ Sorteringsalgoritmerna ska fungera oberoende av vilken data som sparas i Unorder
 Använd din rekursiva insertion sort för att sortera UnorderedList i topplista vyn. Sortera på antalet poäng.
 """
 
-# def insertion_sort(items):
-#     """ Insertion sort """
-#     for i in range(1, len(items)):
-#         j = i
-#         while j > 0 and items[j] < items[j-1]:
-#             items[j], items[j-1] = items[j-1], items[j]
-#             j -= 1
+def insertion_sort(items):
+    """ Insertion sort """
+    for i in range(1, len(items)):
+        j = i
+        while j > 0 and items[j] < items[j-1]:
+            items[j], items[j-1] = items[j-1], items[j]
+            j -= 1
 
-#     return items
+    return items
 
-def recursive_insertion(unsorted_list, current_node):
-    """
-    Rekursiv insertion sort för UnorderedList.
-    Den här funktionen sorterar listan genom att iterera genom den och införa varje nod på rätt plats i den sorterade delen av listan.
-    """
+def recursive_insertion(ulist):
+    """ Rekursiv insertion sort för UnorderedList """
+    if ulist.size() <= 1:
+        return  # Basfall: om listan är tom eller har ett element är den redan sorterad
 
-    # Basfall: Om det inte finns några fler noder att sortera, stoppa rekursionen
-    if current_node is None or current_node.next is None:
-        return unsorted_list
+    # Ta bort det första elementet
+    first = ulist.get(0)
+    ulist.remove(first)
 
-    # Ta nästa nod för att sortera den
-    next_node = current_node.next
+    # Sortera resten av listan rekursivt
+    recursive_insertion(ulist)
 
-    # Införa den aktuella noden på rätt plats i den sorterade listan
-    unsorted_list.head = insert_in_sorted_list(unsorted_list.head, current_node)
+    # Sätt in det borttagna elementet på rätt plats i den sorterade listan
+    insert_sorted(ulist, first)
 
-    # Rekursivt sortera resten av listan
-    return recursive_insertion(unsorted_list, next_node)
+def insert_sorted(ulist, value):
+    """ Hjälpfunktion för att sätta in ett värde på rätt plats i en sorterad lista """
+    # Vi går igenom listan och letar efter den rätta positionen
+    position = 0
+    while position < ulist.size() and ulist.get(position) > value:
+        position += 1
 
-
-def insert_in_sorted_list(sorted_head, new_node):
-    """
-    Hjälpfunktion för att sätta in en nod i en redan sorterad lista.
-    """
-    # Om listan är tom eller om den nya nodens score är större än den första nodens score
-    if sorted_head is None or new_node.score > sorted_head.score:
-        new_node.next = sorted_head
-        return new_node
-
-    current = sorted_head
-    while current.next is not None and current.next.score >= new_node.score:
-        current = current.next
-
-    new_node.next = current.next
-    current.next = new_node
-
-    return sorted_head
+    # Sätt in värdet på rätt position genom att använda set-metoden
+    ulist.items.insert(position, value)
