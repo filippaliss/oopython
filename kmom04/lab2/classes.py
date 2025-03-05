@@ -7,7 +7,7 @@ class Person:
     """
     def __init__(self, name, ssn, address=""):
         self.name = name
-        self.__ssn = ssn
+        self._ssn = ssn
         self.address = address
 
     @property
@@ -15,7 +15,7 @@ class Person:
         """
             retunerar ssn
         """
-        return self.__ssn
+        return self._ssn
 
     def set_address(self, address):
         """
