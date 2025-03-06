@@ -55,7 +55,7 @@ class TestHand(unittest.TestCase):
         hand.roll([1, 3])
 
         new_values = hand.to_list()
-        
+
         self.assertEqual(new_values[0], 1)
         self.assertEqual(new_values[1], 6)
         self.assertEqual(new_values[2], 3)
@@ -67,7 +67,6 @@ class TestHand(unittest.TestCase):
         Test rolling all dice when no arguments are provided.
         """
         hand = Hand()
-        initial_values = hand.to_list()
         hand.roll()
         new_values = hand.to_list()
         self.assertEqual(new_values, [2, 2, 2, 6, 1])
