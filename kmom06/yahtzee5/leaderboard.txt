@@ -1,4 +1,5 @@
-Zoë: 181
-Filippa: 172
+Zoë: 277
+Filippa: 272
 test2: 116
 test3: 161
+frukt te: 186
