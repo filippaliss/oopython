@@ -1,5 +1,6 @@
-Zoë: 277
-Filippa: 272
-test2: 116
-test3: 161
-frukt te: 186
+filippa: 272
+zoe: 277
+test1: 300
+test2: 50
+test3: 275
+test4: 80
