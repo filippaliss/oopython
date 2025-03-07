@@ -5,6 +5,10 @@ Module to define the Hand class.
 from flask import Flask, render_template, session, request, redirect, url_for, flash
 from src.scoreboard import Scoreboard
 from src.hand import Hand
+from src.unorderedlist import UnorderedList
+from src.sort import recursive_insertion
+from src.node import Node
+
 
 app = Flask(__name__)
 
@@ -139,19 +143,41 @@ def submit_score():
 def load_leaderboard():
     """
     Läser in leaderboard.txt och returnerar en lista med tuples (namn, poäng).
+    Hanterar felaktiga rader och saknad fil.
     """
     players = []
     try:
-        players = []
         with open("leaderboard.txt", "r", encoding="utf-8") as f:
             for line in f:
-                name, score = line.strip().split(": ")
-                players.append((name, int(score)))
+                parts = line.strip().split(": ")
+                if len(parts) == 2:  # Kolla att raden är korrekt formatterad
+                    name, score = parts
+                    try:
+                        players.append((name, int(score)))  # Konvertera score till int
+                    except ValueError:
+                        print(f"Ogiltigt poängvärde, hoppar över: {line.strip()}")
+                else:
+                    print(f"Felaktigt format, hoppar över: {line.strip()}")
 
     except FileNotFoundError:
-        pass
+        print("Filen leaderboard.txt hittades inte, skapar en tom leaderboard.")
 
-    return players
+            # Skapa en UnorderedList och lägg till alla spelare
+    unordered_list = UnorderedList()
+    for player in players:
+        unordered_list.add(player)
+
+    # Använd rekursiv insertion sort för att sortera spelarna baserat på poäng
+    recursive_insertion(unordered_list)
+
+    # Skapa en lista med de sorterade spelarna
+    sorted_players = []
+    for i in range(unordered_list.size()):
+        sorted_players.append(unordered_list.get(i))
+
+    return sorted_players
+
+    # return players
 
 @app.route('/leaderboard')
 def leaderboard():

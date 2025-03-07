@@ -95,12 +95,10 @@ class UnorderedList:
         """
         Prints all elements in the list.
         """
-        elements = []
         current = self.head
         while current:
-            elements.append(current.value)
+            print(current.value)
             current = current.next
-        print(elements)
 
     def set(self, index, value):
         """
@@ -110,6 +108,9 @@ class UnorderedList:
         if index < 0 or index >= self._size:
             raise MissingIndex("Index out of bounds.")
         current = self.head
-        for _ in range(index):
+        for i in range(index):
             current = current.next
+        print(f"Set: index {index}, value {value}")  # Debugutskrift
         current.value = value
+
+
