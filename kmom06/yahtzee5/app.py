@@ -160,24 +160,20 @@ def load_leaderboard():
                     print(f"Felaktigt format, hoppar över: {line.strip()}")
 
     except FileNotFoundError:
-        print("Filen leaderboard.txt hittades inte, skapar en tom leaderboard.")
+        pass
 
-            # Skapa en UnorderedList och lägg till alla spelare
     unordered_list = UnorderedList()
     for player in players:
         unordered_list.add(player)
 
-    # Använd rekursiv insertion sort för att sortera spelarna baserat på poäng
     recursive_insertion(unordered_list)
 
-    # Skapa en lista med de sorterade spelarna
     sorted_players = []
     for i in range(unordered_list.size()):
         sorted_players.append(unordered_list.get(i))
 
     return sorted_players
 
-    # return players
 
 @app.route('/leaderboard')
 def leaderboard():
