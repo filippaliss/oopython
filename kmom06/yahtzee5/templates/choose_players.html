@@ -1,0 +1,43 @@
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<div class="container">
+    <h1>Välj antal spelare</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('choose_players') }}" method="POST">
+        <label for="num_players">Antal spelare:</label>
+        <input type="number" id="num_players" name="num_players" min="1" required oninput="addPlayerFields()">
+        
+        <div id="player_names"></div>
+
+        <button type="submit">Starta spelet</button>
+    </form>
+</div>
+
+<script>
+function addPlayerFields() {
+    let numPlayers = document.getElementById("num_players").value;
+    let container = document.getElementById("player_names");
+    container.innerHTML = ""; // Rensa gamla inputs
+
+    for (let i = 0; i < numPlayers; i++) {
+        let input = document.createElement("input");
+        input.type = "text";
+        input.name = "player_name_" + i;
+        input.placeholder = "Spelare " + (i + 1);
+        input.required = true;
+        container.appendChild(input);
+        container.appendChild(document.createElement("br"));
+    }
+}
+</script>
+
+{% include 'footer.html' %}

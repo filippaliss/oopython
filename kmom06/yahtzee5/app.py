@@ -1,44 +1,61 @@
 """
 Module to define the Hand class.
 """
-
+import json
 from flask import Flask, render_template, session, request, redirect, url_for, flash
 from src.scoreboard import Scoreboard
 from src.hand import Hand
 from src.unorderedlist import UnorderedList
 from src.sort import recursive_insertion
 from src.node import Node
+from src.queue import Queue
 
 
 app = Flask(__name__)
 
 app.secret_key = 'zoeofilippaarsjalvmordsbenagnaochelinmed'
+players = {}  # Global dictionary för att lagra spelarnas scoreboards
+
 
 @app.route("/")
 def main():
     """
     Main route for the Yahtzee web application.
-    Creates a Hand object and renders the 'main.html' template with the hand.
-    Returns:
-        str: Rendered HTML template.
+    Skapa en Hand och rendera 'main.html' med rätt Scoreboard.
     """
     if 'reroll_count' not in session:
         session['reroll_count'] = 0
-    if "scoreboard" not in session:
-        scoreboard = Scoreboard()
-        session["scoreboard"] = scoreboard.to_json()
-    else:
-        scoreboard_data = session["scoreboard"]
-        scoreboard = Scoreboard.from_json(scoreboard_data)
+
+
+    if "player_queue" in session:
+        print(session["player_queue"])
+
+    if "current_player" not in session:
+        player_keys = list(players.keys())
+        if len(player_keys) != 0:  # Se till att listan inte är tom
+            print("WTFFFFFFF")
+            session["current_player"] = player_keys[0]  # Första spelaren startar
+        else:
+            print("HÄÄÄÄÄÄR")
+            flash("No players found. Please add players.", "error")
+            return redirect(url_for("choose_players"))
+    
+    current_player = session["current_player"]
+    print(players)
+    print(session["player_queue"][0])
+    print(session["player_queue"][0]["name"])
+    scoreboard_json = session["player_queue"][0]["scoreboard"]
+    scoreboard = Scoreboard().from_json(scoreboard_json)
+
 
     if "hand" not in session:
         session["hand"] = Hand().to_list()
 
     hand = Hand(dice_values=session["hand"])
     game_over = session.get('game_over', False)
-    return render_template('index.html', hand=hand,
-                           scoreboard=scoreboard, reroll_count=session['reroll_count'],
-                           game_over=game_over)
+
+    return render_template('index.html', hand=hand, scoreboard=scoreboard, reroll_count=session['reroll_count'], game_over=game_over)
+
 
 @app.route("/about")
 def about():
@@ -50,7 +67,7 @@ def about():
     """
     return render_template('about.html')
 
-@app.route("/reset")
+@app.route("/reset", methods=["GET"])
 def reset():
     """
     session reset
@@ -65,36 +82,88 @@ def reset():
 @app.route("/choose_rule", methods=["POST"])
 def choose_rule():
     """
-    flash om att man måste välja regel.
-    sätter poäng för rule och tar bort valmöjligheten för den regeln man valt.
+    Spelaren väljer en regel och turen går vidare.
     """
     rule_name = request.form.get("chosen_rule")
     if not rule_name:
         flash("You must select a rule!", "error")
         return redirect(url_for("main"))
+    
+    player_queue_list = session.get("player_queue")
+    current_player = player_queue_list[0]
+    scoreboard_data = current_player["scoreboard"]
+    scoreboard = Scoreboard().from_json(scoreboard_data)
+    player_queue = Queue()
 
-    scoreboard_data = session.get("scoreboard", "{}")
-    scoreboard = Scoreboard.from_json(scoreboard_data)
+    for player in player_queue_list:
+        player_queue.enqueue(player)
+
+    # Skapa en kopia av spelarlistan om den inte redan finns
+    if "copy_player_list" not in session:
+        session["copy_player_list"] = player_queue.to_list()
+
+    player_queue.dequeue()
 
     hand = Hand(dice_values=session.get("hand", []))
 
     try:
         scoreboard.add_points(rule_name, hand)
-        session["scoreboard"] = scoreboard.to_json()
+        scoreboard_data = scoreboard.to_json()
+        current_player["scoreboard"] = scoreboard_data  # Uppdatera aktuell spelares scoreboard
+        
+        # Uppdatera kopian med den nya scoreboarden
+        for player in session["copy_player_list"]:
+            if player["name"] == current_player["name"]:
+                player["scoreboard"] = scoreboard_data  # Uppdatera spelarens scoreboard i kopian
+                break  # Avsluta loopen när vi hittat rätt spelare
+        
         session["hand"] = Hand().to_list()
         session['reroll_count'] = 0
 
-        if scoreboard.finished():
+        # Kontrollera om spelet är slut
+        if scoreboard.finished() and len(player_queue.to_list()) == 0:
             session['game_over'] = True
+
+            # Använd kopian för att hitta vinnaren
+            highest_scoring_player = None
+            highest_score = 0
+            for player in session["copy_player_list"]:  # Använd kopian som har senaste scoreboardarna
+                player_scoreboard = Scoreboard().from_json(player["scoreboard"])
+                player_score = player_scoreboard.get_total_points()
+
+                if player_score > highest_score:
+                    highest_score = player_score
+                    highest_scoring_player = player["name"]
+
+            if highest_scoring_player:
+                # Lägg till vinnaren i leaderboarden
+                players = load_leaderboard()
+                players.append((highest_scoring_player, highest_score))
+
+                with open("leaderboard.txt", "w", encoding="utf-8") as f:
+                    for player in players:
+                        f.write(f"{player[0]}: {player[1]}\n")
+
             flash(f"""All rules have been selected! Game over!
-            Your total score was {scoreboard.get_total_points()}.
-            Great job!""", "end")
+            The winner is {highest_scoring_player} with {highest_score} points!
+            """, "end")
             return redirect(url_for("main"))
+
+        elif scoreboard.finished():
+            session["player_queue"] = player_queue.to_list()
+            session["current_player"] = player_queue.peek()  # Uppdatera aktuell spelare
+        else:
+            player_queue.enqueue(current_player)  # Flytta första spelaren till slutet
+            session["player_queue"] = player_queue.to_list()
+            session["current_player"] = player_queue.peek()  # Uppdatera aktuell spelare
 
     except ValueError as e:
         flash(str(e), "error")
 
     return redirect(url_for("main"))
+
+
+
 
 @app.route("/reroll", methods=["POST"])
 def reroll():
@@ -196,6 +265,76 @@ def remove_player(player):
             f.write(f"{name}: {score}\n")
 
     return redirect(url_for('leaderboard'))
+
+@app.route("/choose_players", methods=["GET", "POST"])
+def choose_players():
+    """
+    Låt spelaren skriva in antal spelare och deras namn.
+    """
+    if request.method == "POST":
+        try:
+            num_players = int(request.form.get("num_players"))
+
+            if num_players < 1:
+                flash("Antalet spelare måste vara minst 1!", "error")
+                return redirect(url_for("choose_players"))
+
+            player_queue = Queue()
+
+            for i in range(num_players):
+                player_name = request.form.get(f"player_name_{i}")
+                if not player_name:
+                    flash("Alla spelare måste ha ett namn!", "error")
+                    return redirect(url_for("choose_players"))
+
+                player_object = {"name": player_name, "scoreboard": Scoreboard().to_json()}
+                player_queue.enqueue(player_object)
+
+            session["player_queue"] = player_queue.to_list()  # Spara kön i sessionen
+            session["current_player"] = player_queue.peek()["name"]  # Första spelaren börjar
+            print(session["current_player"])
+            #läga till scoreboard så att det görs
+            # ✅ Ta bort flaggan så att flash-meddelandet inte visas igen
+            session.pop("flashed_no_players", None)
+
+            return redirect(url_for("main"))
+
+        except ValueError:
+            flash("Ange ett giltigt nummer!", "error")
+            return redirect(url_for("choose_players"))
+
+    return render_template("choose_players.html")
+
+@app.route("/start_game", methods=["GET", "POST"])
+def start_game():
+    if request.method == "POST":
+        player_name = request.form.get("player_names")
+
+        if not player_name:
+            flash("Du måste ange ett namn!", "error")
+            return redirect(url_for("index"))  # Se till att den går tillbaka till huvudvyn
+
+        if 'players' not in session:
+            session['players'] = []
+
+        session['players'].append(player_name)
+
+    return redirect(url_for("main"))  # Korrekt endpoint för huvudsidan
+
+
+@app.route("/end_turn")
+def end_turn():
+    """
+    Slutför spelarens tur och gå till nästa spelare.
+    """
+    player_names = list(players.keys())
+    current_player = session["current_player"]
+    current_index = player_names.index(current_player)
+
+    next_player = player_names[(current_index + 1) % len(player_names)]
+    session["current_player"] = next_player  # Uppdatera till nästa spelare
+
+    return redirect(url_for("main"))
 
 
 if __name__ == '__main__':
