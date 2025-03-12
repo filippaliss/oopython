@@ -81,10 +81,24 @@ class Scoreboard:
     @classmethod
     def from_json(cls, json_data):
         """
-        Deserialisering: omvandla JSON tillbaka till ett Scoreboard-objekt
-        
+        Deserialisering: omvandla JSON tillbaka till ett Scoreboard-objekt.
+        Om json_data redan är en dictionary, använd den direkt.
         """
-        data = json.loads(json_data)
+        if isinstance(json_data, str):  # Om det är en JSON-sträng, omvandla till dictionary
+            data = json.loads(json_data)
+        elif isinstance(json_data, dict):  # Om det redan är en dictionary, använd direkt
+            data = json_data
+        else:
+            raise TypeError("Invalid data format for Scoreboard.from_json")
+
         scoreboard = cls()
         scoreboard.scores = data
         return scoreboard
+
+    def add_players(player_names):
+        """
+        Skapar ett Scoreboard för varje spelare.
+        """
+        global players  # Referera till den globala dictionaryn
+        players = {name: Scoreboard() for name in player_names}  # Skapa ett scoreboard per spelare
+
