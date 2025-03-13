@@ -1,14 +1,13 @@
 """
 Module to define the Hand class.
 """
-import json
 from flask import Flask, render_template, session, request, redirect, url_for, flash
 from src.scoreboard import Scoreboard
 from src.hand import Hand
 from src.unorderedlist import UnorderedList
 from src.sort import recursive_insertion
-from src.node import Node
 from src.queue import Queue
+from src.leaderboard import Leaderboard
 
 
 app = Flask(__name__)
@@ -33,20 +32,16 @@ def main():
     if "current_player" not in session:
         player_keys = list(players.keys())
         if len(player_keys) != 0:  # Se till att listan inte är tom
-            print("WTFFFFFFF")
             session["current_player"] = player_keys[0]  # Första spelaren startar
         else:
-            print("HÄÄÄÄÄÄR")
             flash("No players found. Please add players.", "error")
             return redirect(url_for("choose_players"))
-    
-    current_player = session["current_player"]
+
     print(players)
     print(session["player_queue"][0])
     print(session["player_queue"][0]["name"])
     scoreboard_json = session["player_queue"][0]["scoreboard"]
     scoreboard = Scoreboard().from_json(scoreboard_json)
-
 
     if "hand" not in session:
         session["hand"] = Hand().to_list()
@@ -54,8 +49,9 @@ def main():
     hand = Hand(dice_values=session["hand"])
     game_over = session.get('game_over', False)
 
-    return render_template('index.html', hand=hand, scoreboard=scoreboard, reroll_count=session['reroll_count'], game_over=game_over)
-
+    return render_template(
+        'index.html', hand=hand, scoreboard=scoreboard,
+         reroll_count=session['reroll_count'], game_over=game_over)
 
 @app.route("/about")
 def about():
@@ -88,7 +84,7 @@ def choose_rule():
     if not rule_name:
         flash("You must select a rule!", "error")
         return redirect(url_for("main"))
-    
+
     player_queue_list = session.get("player_queue")
     current_player = player_queue_list[0]
     scoreboard_data = current_player["scoreboard"]
@@ -110,13 +106,13 @@ def choose_rule():
         scoreboard.add_points(rule_name, hand)
         scoreboard_data = scoreboard.to_json()
         current_player["scoreboard"] = scoreboard_data  # Uppdatera aktuell spelares scoreboard
-        
+
         # Uppdatera kopian med den nya scoreboarden
         for player in session["copy_player_list"]:
             if player["name"] == current_player["name"]:
                 player["scoreboard"] = scoreboard_data  # Uppdatera spelarens scoreboard i kopian
                 break  # Avsluta loopen när vi hittat rätt spelare
-        
+
         session["hand"] = Hand().to_list()
         session['reroll_count'] = 0
 
@@ -127,7 +123,7 @@ def choose_rule():
             # Använd kopian för att hitta vinnaren
             highest_scoring_player = None
             highest_score = 0
-            for player in session["copy_player_list"]:  # Använd kopian som har senaste scoreboardarna
+            for player in session["copy_player_list"]:
                 player_scoreboard = Scoreboard().from_json(player["scoreboard"])
                 player_score = player_scoreboard.get_total_points()
 
@@ -137,19 +133,16 @@ def choose_rule():
 
             if highest_scoring_player:
                 # Lägg till vinnaren i leaderboarden
-                players = load_leaderboard()
-                players.append((highest_scoring_player, highest_score))
-
-                with open("leaderboard.txt", "w", encoding="utf-8") as f:
-                    for player in players:
-                        f.write(f"{player[0]}: {player[1]}\n")
+                game_leaderboard = Leaderboard()
+                game_leaderboard.load("leaderboard.txt")
+                game_leaderboard.add_player(highest_scoring_player, highest_score)
+                game_leaderboard.save_to_file()
 
             flash(f"""All rules have been selected! Game over!
             The winner is {highest_scoring_player} with {highest_score} points!
             """, "end")
             return redirect(url_for("main"))
-
-        elif scoreboard.finished():
+        if scoreboard.finished():
             session["player_queue"] = player_queue.to_list()
             session["current_player"] = player_queue.peek()  # Uppdatera aktuell spelare
         else:
@@ -161,8 +154,6 @@ def choose_rule():
         flash(str(e), "error")
 
     return redirect(url_for("main"))
-
-
 
 
 @app.route("/reroll", methods=["POST"])
@@ -196,14 +187,10 @@ def submit_score():
     name = request.form["name"]
     score = int(request.form["score"])
 
-    players = load_leaderboard()
-
-    players.append((name, score))
-
-
-    with open("leaderboard.txt", "w", encoding="utf-8") as f:
-        for player in players:
-            f.write(f"{player[0]}: {player[1]}\n")
+    game_leaderboard = Leaderboard()
+    game_leaderboard.load("leaderboard.txt")
+    game_leaderboard.add_player(name, score)
+    game_leaderboard.save_to_file()
 
     session.clear()
     return redirect(url_for("main"))
@@ -214,25 +201,16 @@ def load_leaderboard():
     Läser in leaderboard.txt och returnerar en lista med tuples (namn, poäng).
     Hanterar felaktiga rader och saknad fil.
     """
-    players = []
+    game_players = []
+    game_leaderboard  = Leaderboard()
     try:
-        with open("leaderboard.txt", "r", encoding="utf-8") as f:
-            for line in f:
-                parts = line.strip().split(": ")
-                if len(parts) == 2:  # Kolla att raden är korrekt formatterad
-                    name, score = parts
-                    try:
-                        players.append((name, int(score)))  # Konvertera score till int
-                    except ValueError:
-                        print(f"Ogiltigt poängvärde, hoppar över: {line.strip()}")
-                else:
-                    print(f"Felaktigt format, hoppar över: {line.strip()}")
-
+        game_leaderboard.load()
+        game_players = game_leaderboard.get_players()
     except FileNotFoundError:
         pass
 
     unordered_list = UnorderedList()
-    for player in players:
+    for player in game_players:
         unordered_list.add(player)
 
     recursive_insertion(unordered_list)
@@ -243,26 +221,24 @@ def load_leaderboard():
 
     return sorted_players
 
-
 @app.route('/leaderboard')
 def leaderboard():
     """
     Visar leaderboard-sidan med spelarpoäng och ett formulär för att ta bort spelare.
     """
-    players = load_leaderboard()
-    return render_template('leaderboard.html', players=players, num_entries=len(players))
+    game_players = load_leaderboard()
+
+    return render_template('leaderboard.html', players=game_players, num_entries=len(players))
 
 @app.route('/remove_player/<player>', methods=['POST'])
 def remove_player(player):
     """
     Removes a player from the leaderboard based on the user's choice.
     """
-    players = load_leaderboard()
-    new_players = [(p, s) for p, s in players if p != player]
-
-    with open("leaderboard.txt", "w", encoding="utf-8") as f:
-        for name, score in new_players:
-            f.write(f"{name}: {score}\n")
+    game_leaderboard = Leaderboard()
+    game_leaderboard.load("leaderboard.txt")
+    game_leaderboard.remove_player((player))
+    game_leaderboard.save_to_file()
 
     return redirect(url_for('leaderboard'))
 
@@ -292,9 +268,7 @@ def choose_players():
 
             session["player_queue"] = player_queue.to_list()  # Spara kön i sessionen
             session["current_player"] = player_queue.peek()["name"]  # Första spelaren börjar
-            print(session["current_player"])
             #läga till scoreboard så att det görs
-            # ✅ Ta bort flaggan så att flash-meddelandet inte visas igen
             session.pop("flashed_no_players", None)
 
             return redirect(url_for("main"))
@@ -307,6 +281,9 @@ def choose_players():
 
 @app.route("/start_game", methods=["GET", "POST"])
 def start_game():
+    """
+    Startar spelet
+    """
     if request.method == "POST":
         player_name = request.form.get("player_names")
 

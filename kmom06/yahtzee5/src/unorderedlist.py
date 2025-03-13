@@ -108,9 +108,6 @@ class UnorderedList:
         if index < 0 or index >= self._size:
             raise MissingIndex("Index out of bounds.")
         current = self.head
-        for i in range(index):
+        for _ in range(index):
             current = current.next
-        print(f"Set: index {index}, value {value}")  # Debugutskrift
         current.value = value
-
-
