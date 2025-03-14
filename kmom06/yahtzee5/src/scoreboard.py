@@ -13,6 +13,7 @@ class Scoreboard:
     """
     def __init__(self):
         self.scores = {}
+        self.players = {}
         self.rules = {
             "Ones": Ones(), "Twos": Twos(), "Threes": Threes(),
             "Fours": Fours(), "Fives": Fives(), "Sixes": Sixes(),
@@ -95,10 +96,8 @@ class Scoreboard:
         scoreboard.scores = data
         return scoreboard
 
-    def add_players(player_names):
+    def add_players(self, player_names):
         """
         Skapar ett Scoreboard för varje spelare.
         """
-        global players  # Referera till den globala dictionaryn
-        players = {name: Scoreboard() for name in player_names}  # Skapa ett scoreboard per spelare
-
+        self.players = {name: Scoreboard() for name in player_names}

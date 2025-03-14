@@ -2,3 +2,4 @@ Zoë: 181
 Filippa: 172
 test2: 116
 test3: 161
+frukt te: 151

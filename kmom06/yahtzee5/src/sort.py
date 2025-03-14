@@ -1,7 +1,11 @@
-from src.unorderedlist import UnorderedList
+"""
+sort funktionen i yatzee spelet
+"""
 
 def insertion_sort(items):
-    """ Insertion sort """
+    """ 
+    Insertion sort 
+    """
     for i in range(1, len(items)):
         j = i
         while j > 0 and items[j] < items[j-1]:
@@ -10,10 +14,12 @@ def insertion_sort(items):
 
     return items
 
-
 def recursive_insertion(unordered_list, index=1):
+    """
+    recursive insertion sort
+    """
     if index >= unordered_list.size():
-        return
+        return unordered_list
 
     current_item = unordered_list.get(index)
 
@@ -25,6 +31,5 @@ def recursive_insertion(unordered_list, index=1):
     unordered_list.set(j, current_item)
 
     recursive_insertion(unordered_list, index + 1)
-
 
     return unordered_list

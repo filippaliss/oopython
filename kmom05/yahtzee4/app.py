@@ -5,6 +5,7 @@ Module to define the Hand class.
 from flask import Flask, render_template, session, request, redirect, url_for, flash
 from src.scoreboard import Scoreboard
 from src.hand import Hand
+from src.leaderboard import Leaderboard
 
 app = Flask(__name__)
 
@@ -123,42 +124,23 @@ def submit_score():
     name = request.form["name"]
     score = int(request.form["score"])
 
-    players = load_leaderboard()
-
-    players.append((name, score))
-
-
-    with open("leaderboard.txt", "w", encoding="utf-8") as f:
-        for player in players:
-            f.write(f"{player[0]}: {player[1]}\n")
+    game_leaderboard = Leaderboard()
+    game_leaderboard.load("leaderboard.txt")
+    game_leaderboard.add_player(name, score)
+    game_leaderboard.save_to_file()
 
     session.clear()
     return redirect(url_for("main"))
-
-
-def load_leaderboard():
-    """
-    Läser in leaderboard.txt och returnerar en lista med tuples (namn, poäng).
-    """
-    players = []
-    try:
-        players = []
-        with open("leaderboard.txt", "r", encoding="utf-8") as f:
-            for line in f:
-                name, score = line.strip().split(": ")
-                players.append((name, int(score)))
-
-    except FileNotFoundError:
-        pass
-
-    return players
 
 @app.route('/leaderboard')
 def leaderboard():
     """
     Visar leaderboard-sidan med spelarpoäng och ett formulär för att ta bort spelare.
     """
-    players = load_leaderboard()
+    game_leaderboard = Leaderboard()
+    game_leaderboard.load("leaderboard.txt")
+    players = leaderboard.get_players()  # Använd den nya metoden
+
     return render_template('leaderboard.html', players=players, num_entries=len(players))
 
 @app.route('/remove_player/<player>', methods=['POST'])
@@ -166,15 +148,12 @@ def remove_player(player):
     """
     Removes a player from the leaderboard based on the user's choice.
     """
-    players = load_leaderboard()
-    new_players = [(p, s) for p, s in players if p != player]
-
-    with open("leaderboard.txt", "w", encoding="utf-8") as f:
-        for name, score in new_players:
-            f.write(f"{name}: {score}\n")
+    game_leaderboard = Leaderboard()
+    game_leaderboard.load("leaderboard.txt")
+    game_leaderboard.remove_player((player))
+    game_leaderboard.save_to_file()
 
     return redirect(url_for('leaderboard'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)

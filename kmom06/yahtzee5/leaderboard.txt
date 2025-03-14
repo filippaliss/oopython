@@ -1,5 +1,6 @@
-test2: 50
-test4: 80
+test1: 300
+zoe: 277
+test3: 275
 filippa: 272
 test3: 275
 zoe: 277
