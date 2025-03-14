@@ -195,7 +195,6 @@ def submit_score():
     session.clear()
     return redirect(url_for("main"))
 
-
 def load_leaderboard():
     """
     Läser in leaderboard.txt och returnerar en lista med tuples (namn, poäng).
