@@ -38,14 +38,21 @@ class Leaderboard:
 
     def remove_player(self, name):
         """
-        Tar bort en spelare från listan baserat på namn.
+        ta bort en spelare
         """
         current = self.players.head
+        previous = None
+
         while current:
             if current.value[0] == name:
-                self.players.remove(current.value)
+                if previous is None:
+                    self.players.head = current.next
+                else:
+                    previous.next = current.next
                 return
+            previous = current
             current = current.next
+
 
     def get_score(self, player):
         """
