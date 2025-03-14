@@ -29,6 +29,9 @@ class Leaderboard:
         self.players.add((name, score))
 
     def remove_player(self, name):
+        """
+        Ta bort spelare
+        """
         current = self.players.head
         previous = None
 
