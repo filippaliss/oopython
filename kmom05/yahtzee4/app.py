@@ -150,7 +150,8 @@ def remove_player(player):
     """
     game_leaderboard = Leaderboard()
     game_leaderboard.load("leaderboard.txt")
-    game_leaderboard.remove_player((player))
+
+    game_leaderboard.remove_player(player)
     game_leaderboard.save_to_file()
 
     return redirect(url_for('leaderboard'))
