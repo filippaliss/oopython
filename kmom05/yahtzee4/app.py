@@ -139,7 +139,7 @@ def leaderboard():
     """
     game_leaderboard = Leaderboard()
     game_leaderboard.load("leaderboard.txt")
-    players = leaderboard.get_players()  # Använd den nya metoden
+    players = game_leaderboard.get_players()  # Använd den nya metoden
 
     return render_template('leaderboard.html', players=players, num_entries=len(players))
 
