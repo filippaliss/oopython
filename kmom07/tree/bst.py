@@ -1,14 +1,29 @@
+"""
+BinarySearchTree klassen 
+"""
 from node import Node
-# import treevizer
 class BinarySearchTree:
+    """
+    En klass som representerar ett binärt sökträd (BST) med
+    funktioner för insättning, borttagning, sökning och inorder-traversering.
+    """
     def __init__(self):
         self.root = None
         self._size = 0
-    
+
     def size(self):
+        """
+        Returnera antalet noder i trädet. 
+        Skapa denna tidigt, testerna använde den.
+        """
         return self._size
- 
+
     def insert(self, key, value):
+        """
+        Skapar en ny nod med key och value.
+        Lägger till en noden på rätt plats i trädet, baserat på key.
+        Om nod med key redan finns i trädet skriv över värdet i noden.
+        """
         if self.root is None:
             self.root = Node(key, value)
         else:
@@ -33,6 +48,10 @@ class BinarySearchTree:
             self._size -= 1  # Undvik att storleken ökar om vi bara skriver över
 
     def inorder_traversal_print(self):
+        """
+        Skriver ut värdet i noderna i trädet i rätt ordning,
+        lågt till högt. En rad per värde.
+        """
         self._inorder_recursive(self.root)
 
     def _inorder_recursive(self, node):
@@ -42,6 +61,10 @@ class BinarySearchTree:
             self._inorder_recursive(node.right)
 
     def get(self, key):
+        """
+        Returnera value från noden med nyckeln key.
+        Om key inte finns i trädet lyft ett KeyError exception (det inbyggda).
+        """
         node = self._find(self.root, key)
         if node is None:
             raise KeyError(f"Key {key} not found in tree")
@@ -55,12 +78,16 @@ class BinarySearchTree:
         return self._find(node.right, key)
 
     def remove(self, key):
+        """
+        Ta bort nod med samma key, returnera värdet från noden.
+        Om nod med key inte finns lyft KeyError exception (det inbyggda).
+        """
         node = self._find(self.root, key)
         if node is None:
             raise KeyError(f"Key {key} not found in tree")
         self._size -= 1
         return self._remove_node(node)
- 
+
     def _remove_node(self, node):
         original_value = node.value  # Spara det ursprungliga värdet
 
@@ -77,7 +104,6 @@ class BinarySearchTree:
             self._replace_node_in_parent(node, child)
 
         return original_value
-        
 
     def _replace_node_in_parent(self, node, new_node):
         if node.parent is not None:  # Kontrollera att noden har en parent
@@ -87,22 +113,12 @@ class BinarySearchTree:
                 node.parent.right = new_node
 
         else:  # Om noden är root
-            self.root = new_node  
+            self.root = new_node
 
         if new_node is not None:
             new_node.parent = node.parent  # Uppdatera föräldern till den nya noden
 
- 
     def _find_min(self, node):
         while node.has_left_child():
             node = node.left
         return node
-
-# if __name__ == "__main__":
-#     bst = BinarySearchTree()
-#     arr = [5, 2, 10, 7]
-#     for i in arr:
-#         bst.insert(i, str(i))
-#     bst.remove(10)
-#     treevizer.to_dot(bst.root, structure_type="bbt", dot_path="tree.dot")
-#     treevizer.to_png(bst.root, structure_type="bbt", dot_path="tree.dot", png_path="tree.png")
