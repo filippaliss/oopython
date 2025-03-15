@@ -1,115 +1,108 @@
-"""
-BinarySearchTree lösningar
-"""
 from node import Node
-
+# import treevizer
 class BinarySearchTree:
-    """
-    bst class
-    """
     def __init__(self):
         self.root = None
         self._size = 0
-
+    
     def size(self):
-        """
-        return the size
-        """
         return self._size
-
+ 
     def insert(self, key, value):
-        """
-        Skapar en ny nod med key och value.
-        Lägger till en noden på rätt plats i trädet, baserat på key.
-        Om nod med key redan finns i trädet skriv över värdet i noden.
-        """
-        def _insert(node, key, value, parent):
-            if node is None:
-                self._size += 1
-                return Node(key, value, parent)
-            if key < node.key:
-                node.left = _insert(node.left, key, value, node)
-            elif key > node.key:
-                node.right = _insert(node.right, key, value, node)
-            else:
-                node.value = value
-            return node
+        if self.root is None:
+            self.root = Node(key, value)
+        else:
+            self._insert_recursive(self.root, key, value)
+        self._size += 1
 
-        self.root = _insert(self.root, key, value, None)
+    def _insert_recursive(self, current, key, value):
+        if key < current.key:
+            if current.left is None:
+                current.left = Node(key, value)
+                current.left.parent = current
+            else:
+                self._insert_recursive(current.left, key, value)
+        elif key > current.key:
+            if current.right is None:
+                current.right = Node(key, value)
+                current.right.parent = current
+            else:
+                self._insert_recursive(current.right, key, value)
+        else:
+            current.value = value  # Skriv över värdet om nyckeln redan finns
+            self._size -= 1  # Undvik att storleken ökar om vi bara skriver över
 
     def inorder_traversal_print(self):
-        """
-        Skriver ut värdet i noderna i trädet i rätt ordning,
-        lågt till högt. En rad per värde.
-        """
-        def _inorder(node):
-            if node:
-                _inorder(node.left)
-                print(node.value)
-                _inorder(node.right)
-        _inorder(self.root)
+        self._inorder_recursive(self.root)
 
+    def _inorder_recursive(self, node):
+        if node is not None:
+            self._inorder_recursive(node.left)
+            print(node.value)
+            self._inorder_recursive(node.right)
 
     def get(self, key):
-        """
-        Returnera value från noden med nyckeln key.
-        Om key inte finns i trädet lyft ett KeyError exception (det inbyggda).
-        """
-        def _get(node, key):
-            if node is None:
-                raise KeyError(f"Key {key} not found.")
-            if key < node.key:
-                return _get(node.left, key)
-            elif key > node.key:
-                return _get(node.right, key)
-            else:
-                return node.value
+        node = self._find(self.root, key)
+        if node is None:
+            raise KeyError(f"Key {key} not found in tree")
+        return node.value
 
-        return _get(self.root, key)
-
+    def _find(self, node, key):
+        if node is None or node.key == key:
+            return node
+        if key < node.key:
+            return self._find(node.left, key)
+        return self._find(node.right, key)
 
     def remove(self, key):
-        """
-        Ta bort nod med samma key, returnera värdet från noden.
-        Om nod med key inte finns lyft KeyError exception (det inbyggda).
-        """
-        def _remove(node, key):
-            if node is None:
-                raise KeyError(f"Key {key} not found.")
+        node = self._find(self.root, key)
+        if node is None:
+            raise KeyError(f"Key {key} not found in tree")
+        self._size -= 1
+        return self._remove_node(node)
+ 
+    def _remove_node(self, node):
+        original_value = node.value  # Spara det ursprungliga värdet
 
-            if key < node.key:
-                node.left = _remove(node.left, key)
-            elif key > node.key:
-                node.right = _remove(node.right, key)
-            else:
-                # Fall 1: Löv
-                if node.left is None and node.right is None:
-                    self._size -= 1
-                    return None, node.key  # Returnerar nodens nyckel för att användas senare
+        if node.is_leaf():  # Inga barn
+            self._replace_node_in_parent(node, None)
 
-                # Fall 2: Enbart vänster eller höger barn
-                elif node.left is None:
-                    self._size -= 1
-                    return node.right, node.key
-                elif node.right is None:
-                    self._size -= 1
-                    return node.left, node.key
-                # Fall 3: Två barn
-                else:
-                    min_node = self._find_min(node.right)
-                    node.key, node.value = min_node.key, min_node.value
-                    node.right, _ = _remove(node.right, min_node.key)
-                    return node, node.key
+        elif node.has_both_children():  # Två barn
+            successor = self._find_min(node.right)
+            node.key, node.value = successor.key, successor.value
+            self._remove_node(successor)  # Ta bort successorn från dess ursprungliga plats
 
-            return node, key
+        else:  # Endast ett barn
+            child = node.left if node.has_left_child() else node.right
+            self._replace_node_in_parent(node, child)
 
-        self.root, removed_key = _remove(self.root, key)
-        return str(removed_key)
+        return original_value
+        
 
+    def _replace_node_in_parent(self, node, new_node):
+        if node.parent is not None:  # Kontrollera att noden har en parent
+            if node.is_left_child():
+                node.parent.left = new_node
+            elif node.is_right_child():
+                node.parent.right = new_node
+
+        else:  # Om noden är root
+            self.root = new_node  
+
+        if new_node is not None:
+            new_node.parent = node.parent  # Uppdatera föräldern till den nya noden
+
+ 
     def _find_min(self, node):
-        """
-        Returnera antalet noder i trädet. Skapa denna tidigt, testerna använde den.
-        """
-        while node.left:
+        while node.has_left_child():
             node = node.left
         return node
+
+# if __name__ == "__main__":
+#     bst = BinarySearchTree()
+#     arr = [5, 2, 10, 7]
+#     for i in arr:
+#         bst.insert(i, str(i))
+#     bst.remove(10)
+#     treevizer.to_dot(bst.root, structure_type="bbt", dot_path="tree.dot")
+#     treevizer.to_png(bst.root, structure_type="bbt", dot_path="tree.dot", png_path="tree.png")
