@@ -1,9 +1,10 @@
 """
-node funktionen 
+Node klassen 
 """
 class Node:
     """
-    Node klassen     
+    En nod i ett binärt träd som lagrar en nyckel och ett värde
+    samt referenser till sina barn- och föräldranoder.
     """
     def __init__(self, key, value, parent=None):
         self.key = key
