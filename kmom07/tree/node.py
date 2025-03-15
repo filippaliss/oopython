@@ -41,13 +41,13 @@ class Node:
         """
         returnera True om noden är left child till sin parent nod, annars False.
         """
-        return self.has_parent() and self.parent.left == self
+        return self.parent is not None and self.parent.left is self
 
     def is_right_child(self):
         """
         returnera True om noden är right child tills sin parent nod, annars False.
         """
-        return self.has_parent() and self.parent.right == self
+        return self.parent is not None and self.parent.right is self
 
     def is_leaf(self):
         """ 
@@ -55,7 +55,7 @@ class Node:
         """
         return not self.has_left_child() and not self.has_right_child()
 
-    def __it__(self, other):
+    def __lt__(self, other):
         """
         returnera True om nodens key är mindre än other, annars False.
         """
