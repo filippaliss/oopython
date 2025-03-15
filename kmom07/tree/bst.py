@@ -4,7 +4,8 @@ BinarySearchTree klassen
 from node import Node
 class BinarySearchTree:
     """
-    BinarySearchTree klassen 
+    En klass som representerar ett binärt sökträd (BST) med
+    funktioner för insättning, borttagning, sökning och inorder-traversering.
     """
     def __init__(self):
         self.root = None
