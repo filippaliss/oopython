@@ -3,14 +3,9 @@
     metoder för att lägga till, hämta och ta bort element.
 """
 from src.errors import MissingIndex, MissingValue
+from src.node import Node
 
-class Node:
-    """
-    A class representing a node in a linked list.
-    """
-    def __init__(self, value):
-        self.value = value
-        self.next = None
+
 
 class UnorderedList:
     """
