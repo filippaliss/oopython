@@ -30,14 +30,14 @@ class Leaderboard:
 
     def remove_player(self, name):
         """
-        Tar bort en spelare från listan genom att använda remove() istället för att direkt hantera head.
+        Tar bort en spelare från listan genom att använda remove()
+        istället för att direkt hantera head.
         """
         try:
-            # Hitta spelaren i listan
-            for i in range(self.players._size):  # Vi antar att UnorderedList har en _size variabel
-                player = self.players.get(i)  # Hämta spelaren på index i
-                if player[0] == name:  # Om namnet matchar
-                    self.players.remove(player)  # Använd remove() för att ta bort spelaren
+            for i in range(self.players.size()):
+                player = self.players.get(i)
+                if player[0] == name:
+                    self.players.remove(player)
                     return
             raise ValueError("Spelaren finns inte i listan.")
         except ValueError as e:
