@@ -30,20 +30,18 @@ class Leaderboard:
 
     def remove_player(self, name):
         """
-        Ta bort spelare
+        Tar bort en spelare från listan genom att använda remove()
+        istället för att direkt hantera head.
         """
-        current = self.players.head
-        previous = None
-
-        while current:
-            if current.value[0] == name:
-                if previous is None:
-                    self.players.head = current.next
-                else:
-                    previous.next = current.next
-                return
-            previous = current
-            current = current.next
+        try:
+            for i in range(self.players.size()):
+                player = self.players.get(i)
+                if player[0] == name:
+                    self.players.remove(player)
+                    return
+            raise ValueError("Spelaren finns inte i listan.")
+        except ValueError as e:
+            print(f"Fel: {e}")
 
     def get_score(self, player):
         """
