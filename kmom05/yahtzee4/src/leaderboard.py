@@ -54,18 +54,11 @@ class Leaderboard:
         Spara leaderboarden till en fil.
         """
         with open("leaderboard.txt", "w", encoding="utf-8") as f:
-            current = self.players.head
-            while current:
-                f.write(f"{current.value[0]}: {current.value[1]}\n")
-                current = current.next
+            for name, score in self.players:
+                f.write(f"{name}: {score}\n")
 
     def get_players(self):
         """
         Returnerar en lista med tuples av spelarnamn och poäng.
         """
-        players = []
-        current = self.players.head
-        while current:
-            players.append(current.value)  # Varje node i listan innehåller en tuple (name, score)
-            current = current.next
-        return players
+        return [player for player in self.players]
