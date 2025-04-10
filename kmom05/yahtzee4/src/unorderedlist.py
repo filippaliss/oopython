@@ -108,3 +108,13 @@ class UnorderedList:
         for _ in range(index):
             current = current.next
         current.value = value
+    def __iter__(self):
+        """
+        returnerar en iterator över en kopierad lista.
+        """
+        elements = []
+        current = self.head
+        while current:
+            elements.append(current.value)
+            current = current.next
+        return iter(elements)
