@@ -61,4 +61,4 @@ class Leaderboard:
         """
         Returnerar en lista med tuples av spelarnamn och poäng.
         """
-        return [player for player in self.players]
+        return list(self.players)
